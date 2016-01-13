@@ -244,6 +244,7 @@ public class Parqueadero implements Serializable{
 			try {
 				oldBackup.delete();
 			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "No se pudo eliminar el archivo.");
 				System.out.println("Excepcion al eliminar el backup anterior." + e.getCause());
 			}
 			lastBackup = newBackup;
@@ -280,7 +281,7 @@ public class Parqueadero implements Serializable{
 				e.printStackTrace();
 			}
 		}
-		backup();
+		//backup();							TODO proceso bajo demanda.
 	}
 	public void guardar(String nombre) {
 		FileOutputStream archivo = null;

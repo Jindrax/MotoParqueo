@@ -80,6 +80,11 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
+import java.awt.CardLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EtchedBorder;
 
 @SuppressWarnings("unused")
 public class InterfazGrafica {
@@ -176,6 +181,7 @@ public class InterfazGrafica {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void initialize() {
 		frmMotoparqueo = new JFrame();
+		frmMotoparqueo.getContentPane().setBackground(Color.BLACK);
 		frmMotoparqueo.setFont(new Font("Arial", Font.PLAIN, 18));
 		frmMotoparqueo.addWindowListener(new WindowAdapter() {
 			@Override
@@ -214,6 +220,8 @@ public class InterfazGrafica {
 		frmMotoparqueo.getContentPane().setLayout(null);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBorder(null);
+		tabbedPane.setBackground(Color.BLACK);
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		tabbedPane.setBounds(10, 11, 1394, 799);
 		frmMotoparqueo.getContentPane().add(tabbedPane);
@@ -230,6 +238,8 @@ public class InterfazGrafica {
 		});
 		tableMotosDiario.setFont(new Font("Arial", Font.PLAIN, 20));
 		JPanel panelDiario = new JPanel();
+		panelDiario.setBorder(null);
+		panelDiario.setBackground(Color.YELLOW);
 		panelDiario.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
@@ -238,39 +248,15 @@ public class InterfazGrafica {
 			}
 		});
 		tabbedPane.addTab("Diario", null, panelDiario, null);
+		tabbedPane.setEnabledAt(0, true);
+		tabbedPane.setForegroundAt(0, Color.BLACK);
+		tabbedPane.setBackgroundAt(0, Color.YELLOW);
 		panelDiario.setLayout(null);
 		
 		scrollPaneDiario = new JScrollPane();
 		scrollPaneDiario.setBounds(10, 11, 1015, 740);
 		panelDiario.add(scrollPaneDiario);
 		scrollPaneDiario.setViewportView(getTableMotosDiario());
-		
-		textoPlaca = new JTextField();
-		textoPlaca.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				textoPlaca.selectAll();
-			}
-		});
-		textoPlaca.setFont(new Font("Arial", Font.PLAIN, 20));
-		textoPlaca.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (textoPlaca.getText().length()>=5) {
-					textoCascos.requestFocus();
-				}else{
-					btnRegistrar.requestFocus();
-				}
-			}
-		});
-		textoPlaca.setHorizontalAlignment(SwingConstants.RIGHT);
-		textoPlaca.setBounds(1213, 11, 166, 30);
-		panelDiario.add(textoPlaca);
-		textoPlaca.setColumns(10);
-		
-		JLabel lblPlaca = new JLabel("Placa");
-		lblPlaca.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblPlaca.setBounds(1149, 14, 49, 24);
-		panelDiario.add(lblPlaca);
 		
 		btnRegistrar = new JButton("Registrar");
 		btnRegistrar.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -282,30 +268,6 @@ public class InterfazGrafica {
 		});
 		btnRegistrar.setBounds(1259, 87, 120, 40);
 		panelDiario.add(btnRegistrar);
-		
-		JLabel lblCascos = new JLabel("Cascos");
-		lblCascos.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblCascos.setBounds(1149, 55, 66, 24);
-		panelDiario.add(lblCascos);
-		
-		textoCascos = new JTextField();
-		textoCascos.setFont(new Font("Arial", Font.PLAIN, 20));
-		textoCascos.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				btnRegistrar.requestFocus();
-			}
-		});
-		textoCascos.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				textoCascos.selectAll();
-			}
-		});
-		textoCascos.setHorizontalAlignment(SwingConstants.RIGHT);
-		textoCascos.setText("0");
-		textoCascos.setColumns(10);
-		textoCascos.setBounds(1223, 52, 156, 30);
-		panelDiario.add(textoCascos);
 		
 		JLabel lblValor = new JLabel("Valor");
 		lblValor.setFont(new Font("Arial", Font.PLAIN, 40));
@@ -347,19 +309,10 @@ public class InterfazGrafica {
 		btnCobrar.setBounds(1223, 354, 156, 40);
 		panelDiario.add(btnCobrar);
 		
-		JLabel lblPlaca_1 = new JLabel("Placa");
-		lblPlaca_1.setFont(new Font("Arial", Font.PLAIN, 40));
-		lblPlaca_1.setBounds(1035, 177, 99, 47);
-		panelDiario.add(lblPlaca_1);
-		
-		ePlaca = new JLabel("0");
-		ePlaca.setFont(new Font("Arial", Font.PLAIN, 40));
-		ePlaca.setHorizontalAlignment(SwingConstants.RIGHT);
-		ePlaca.setBounds(1137, 170, 242, 47);
-		panelDiario.add(ePlaca);
-		
 		JSeparator separator = new JSeparator();
-		separator.setBounds(1035, 138, 344, 5);
+		separator.setForeground(Color.BLACK);
+		separator.setBackground(Color.BLACK);
+		separator.setBounds(1035, 150, 344, 5);
 		panelDiario.add(separator);
 		
 		JButton btnImprimir = new JButton("Imprimir");
@@ -372,7 +325,94 @@ public class InterfazGrafica {
 		btnImprimir.setBounds(1035, 354, 163, 40);
 		panelDiario.add(btnImprimir);
 		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		panel_1.setBackground(Color.BLACK);
+		panel_1.setBounds(1035, 177, 344, 47);
+		panelDiario.add(panel_1);
+		panel_1.setLayout(null);
+		
+		ePlaca = new JLabel("0");
+		ePlaca.setBounds(111, 0, 230, 47);
+		ePlaca.setForeground(Color.WHITE);
+		panel_1.add(ePlaca);
+		ePlaca.setFont(new Font("Arial", Font.PLAIN, 40));
+		ePlaca.setHorizontalAlignment(SwingConstants.RIGHT);
+		
+		JLabel lblPlaca_1 = new JLabel("Placa");
+		lblPlaca_1.setBounds(3, 0, 99, 47);
+		panel_1.add(lblPlaca_1);
+		lblPlaca_1.setForeground(Color.WHITE);
+		lblPlaca_1.setFont(new Font("Arial", Font.PLAIN, 40));
+		
+		JPanel panel_2 = new JPanel();
+		panel_2.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		panel_2.setBackground(Color.BLACK);
+		panel_2.setBounds(1035, 11, 344, 30);
+		panelDiario.add(panel_2);
+		panel_2.setLayout(null);
+		
+		JLabel lblPlaca = new JLabel("Placa:");
+		lblPlaca.setForeground(Color.WHITE);
+		lblPlaca.setBounds(3, 0, 76, 30);
+		panel_2.add(lblPlaca);
+		lblPlaca.setFont(new Font("Arial", Font.PLAIN, 20));
+		
+		textoPlaca = new JTextField();
+		textoPlaca.setBounds(178, 0, 166, 30);
+		panel_2.add(textoPlaca);
+		textoPlaca.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				textoPlaca.selectAll();
+			}
+		});
+		textoPlaca.setFont(new Font("Arial", Font.PLAIN, 20));
+		textoPlaca.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (textoPlaca.getText().length()>=5) {
+					textoCascos.requestFocus();
+				}else{
+					btnRegistrar.requestFocus();
+				}
+			}
+		});
+		textoPlaca.setHorizontalAlignment(SwingConstants.RIGHT);
+		textoPlaca.setColumns(10);
+		
+		JPanel panel_3 = new JPanel();
+		panel_3.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		panel_3.setBackground(Color.YELLOW);
+		panel_3.setBounds(1035, 46, 344, 30);
+		panelDiario.add(panel_3);
+		panel_3.setLayout(null);
+		
+		JLabel lblCascos = new JLabel("Cascos:");
+		lblCascos.setBounds(3, 3, 87, 24);
+		panel_3.add(lblCascos);
+		lblCascos.setFont(new Font("Arial", Font.PLAIN, 20));
+		
+		textoCascos = new JTextField();
+		textoCascos.setBounds(178, 0, 166, 30);
+		panel_3.add(textoCascos);
+		textoCascos.setFont(new Font("Arial", Font.PLAIN, 20));
+		textoCascos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnRegistrar.requestFocus();
+			}
+		});
+		textoCascos.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				textoCascos.selectAll();
+			}
+		});
+		textoCascos.setHorizontalAlignment(SwingConstants.RIGHT);
+		textoCascos.setText("0");
+		textoCascos.setColumns(10);
+		
 		JPanel panelAdmin = new JPanel();
+		panelAdmin.setBackground(Color.YELLOW);
 		panelAdmin.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
@@ -404,6 +444,7 @@ public class InterfazGrafica {
 			}
 		});		
 		JPanel panelMensual = new JPanel();
+		panelMensual.setBackground(Color.YELLOW);
 		panelMensual.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
@@ -550,10 +591,14 @@ public class InterfazGrafica {
 		panelMensual.add(btnPagoMensual);
 		
 		JSeparator separator_1 = new JSeparator();
+		separator_1.setBackground(Color.BLACK);
+		separator_1.setForeground(Color.BLACK);
 		separator_1.setBounds(1122, 286, 257, 14);
 		panelMensual.add(separator_1);
 		
 		JSeparator separator_2 = new JSeparator();
+		separator_2.setForeground(Color.BLACK);
+		separator_2.setBackground(Color.BLACK);
 		separator_2.setBounds(1122, 413, 257, 14);
 		panelMensual.add(separator_2);
 		
@@ -745,6 +790,7 @@ public class InterfazGrafica {
 		panelAdmin.add(btnAdmAbrirCarpeta);
 		
 		JPanel panel = new JPanel();
+		panel.setBackground(Color.YELLOW);
 		panel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
 		panel.setBounds(1172, 46, 207, 617);
 		panelAdmin.add(panel);
