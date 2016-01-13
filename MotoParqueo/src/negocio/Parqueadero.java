@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 
 import contabilidad.Contabilidad;
 import persistencia.BancoDeDatos;
+import presentacion.Utilidades;
 
 public class Parqueadero implements Serializable{
 	private static final long serialVersionUID = -4375449400774660837L;
@@ -32,6 +33,7 @@ public class Parqueadero implements Serializable{
 	private CupoDiario cupoDiaAux = null;
 	private int mensualidad = 20000;
 	private long [] valor = {600,900,700};
+	private String lastBackup = null;
 	/**
 	 * 
 	 */
@@ -233,11 +235,58 @@ public class Parqueadero implements Serializable{
 		return retirado;
 	}
 	
+	public void backup(){
+		if(lastBackup!=null){
+			GregorianCalendar hoy = new GregorianCalendar();
+			String newBackup = "backup-"+Utilidades.formaterFechaFile(hoy)+"-"+Utilidades.formaterHoraFile(hoy)+".dat";
+			guardar(newBackup);
+			File oldBackup = new File(lastBackup);
+			try {
+				oldBackup.delete();
+			} catch (Exception e) {
+				System.out.println("Excepcion al eliminar el backup anterior." + e.getCause());
+			}
+			lastBackup = newBackup;
+		}else{
+			GregorianCalendar hoy = new GregorianCalendar();
+			String newBackup = "backup-"+Utilidades.formaterFechaFile(hoy)+"-"+Utilidades.formaterHoraFile(hoy)+".dat";
+			guardar(newBackup);
+			lastBackup = newBackup;
+		}
+	}
+	
 	public void guardar() {
 		FileOutputStream archivo = null;
 		ObjectOutputStream oOStream = null;
 		try {
 			File file = new File("archivo.dat");
+			archivo = new FileOutputStream(file);
+			oOStream = new ObjectOutputStream(archivo);
+			idCupoDiario = CupoDiario.getId();
+			oOStream.writeObject(this);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				oOStream.close();
+				archivo.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		backup();
+	}
+	public void guardar(String nombre) {
+		FileOutputStream archivo = null;
+		ObjectOutputStream oOStream = null;
+		try {
+			File file = new File(nombre);
 			archivo = new FileOutputStream(file);
 			oOStream = new ObjectOutputStream(archivo);
 			idCupoDiario = CupoDiario.getId();
@@ -419,5 +468,11 @@ public class Parqueadero implements Serializable{
 			return cupo;
 		}
 		return null;
+	}
+	public String getLastBackup() {
+		return lastBackup;
+	}
+	public void setLastBackup(String lastBackup) {
+		this.lastBackup = lastBackup;
 	}
 }

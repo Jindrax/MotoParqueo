@@ -54,4 +54,37 @@ public class Utilidades {
 			return tiempoTrans+" m.";
 		}
 	}
+	public static String formaterHoraFile(GregorianCalendar cal){
+		int hora = cal.get(GregorianCalendar.HOUR_OF_DAY);
+		int minuto = cal.get(GregorianCalendar.MINUTE);
+		if(hora>=10 && minuto>=10) {
+			return (hora + "-" + minuto);
+		}
+		if(hora>=10 && minuto<10){
+			return (hora + "-0" + minuto);
+		}
+		if(hora<10 && minuto>=10){
+			return ("0"+hora + "-" + minuto);
+		}
+		if(hora<10 && minuto<10){
+			return ("0"+hora + "-0" + minuto);
+		}
+		return null;
+	}
+	public static String formaterFechaFile(GregorianCalendar cal){
+		int year = cal.get(GregorianCalendar.YEAR);
+		int month = cal.get(GregorianCalendar.MONTH);
+		int day = cal.get(GregorianCalendar.DAY_OF_MONTH);
+		month++;
+		if(day<10 && month>10){
+			return "0" + day + "-" + month + "-" + year;
+		}
+		if(day>10 && month<10){
+			return day + "-" + "0" + month + "-" + year;
+		}
+		if(day>10 && month>10){
+			return day + "-" + month + "-" + year;
+		}
+		return day + "-" + month + "-" + year;
+	}
 }
