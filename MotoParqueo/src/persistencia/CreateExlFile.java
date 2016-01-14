@@ -1,7 +1,6 @@
 package persistencia;
 
 import java.io.*;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -218,8 +217,7 @@ public class CreateExlFile{
 		}
 	}
 	
-	public static void guardarContabilidad(Contabilidad contabilidad){
-		String hoy = Utilidades.formaterFecha(new GregorianCalendar());
+	public static void guardarContabilidad(Contabilidad contabilidad, String hoy){
 		String folder = System.getProperty("user.home")+"\\Documents\\Contabilidad-MotoParqueo";
 		createFolder(folder);
 		String[] fecha = hoy.split("/");
@@ -247,10 +245,9 @@ public class CreateExlFile{
 			System.out.println(ex);
 		}
 	}
-	public static void guardarHistorialDia(List<CupoDiario> historial){
+	public static void guardarHistorialDia(List<CupoDiario> historial, String hoy){
 		String folder = System.getProperty("user.home")+"\\AppData\\Local\\MotoParqueo\\Historial";
 		createFolder(folder);
-		String hoy = Utilidades.formaterFecha(new GregorianCalendar());
 		String[] fecha = hoy.split("/");
 		try {
 			File file = new File(folder+"\\"+fecha[1]+"-"+fecha[2]+".xls");

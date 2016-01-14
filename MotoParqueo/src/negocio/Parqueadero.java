@@ -15,6 +15,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import contabilidad.Contabilidad;
+import contabilidad.tipoTrans;
 import persistencia.BancoDeDatos;
 import presentacion.Utilidades;
 
@@ -467,5 +468,59 @@ public class Parqueadero implements Serializable{
 	}
 	public void setLastBackup(String lastBackup) {
 		this.lastBackup = lastBackup;
+	}
+	public CupoDiario ingresoDiarioEspecial(GregorianCalendar fecha, String placa, GregorianCalendar entrada, GregorianCalendar salida){
+		ClienteDiario cliente = dataBank.buscarDiario(placa);
+		CupoDiario nuevoCupo = null;
+		if(cliente!=null){
+			nuevoCupo = new CupoDiario(cliente,entrada,salida);
+			cliente.setEntradas(cliente.getEntradas()+1);
+			nuevoCupo.calcularTiempoTrans();
+			nuevoCupo.calcularCobro(this.valor);
+			contabilidad.ingresoEspecial(fecha, nuevoCupo.getValorCobrado(), tipoTrans.diario,placa);
+			nuevoCupo.getCliente().setMinutosReg((long) (nuevoCupo.getCliente().getMinutosReg() + nuevoCupo.getTiempoTranscurrido()));
+			nuevoCupo.getCliente().setCobroTotal((int) (nuevoCupo.getCliente().getCobroTotal() + nuevoCupo.getValorCobrado()));
+			return nuevoCupo;
+		}
+		else{
+			cliente = new ClienteDiario(placa);
+			nuevoCupo = new CupoDiario(cliente,entrada,salida);
+			cliente.setEntradas(cliente.getEntradas()+1);
+			dataBank.adjuntarClienteDiario(cliente);
+			nuevoCupo.calcularTiempoTransEspecial();
+			nuevoCupo.calcularCobro(this.valor);
+			contabilidad.ingresoEspecial(fecha, nuevoCupo.getValorCobrado(), tipoTrans.diario,placa);
+			nuevoCupo.getCliente().setMinutosReg((long) (nuevoCupo.getCliente().getMinutosReg() + nuevoCupo.getTiempoTranscurrido()));
+			nuevoCupo.getCliente().setCobroTotal((int) (nuevoCupo.getCliente().getCobroTotal() + nuevoCupo.getValorCobrado()));
+			return nuevoCupo;
+		}
+	}
+	public CupoDiario ingresoDiarioEspecial(GregorianCalendar fecha, String placa, GregorianCalendar entrada, GregorianCalendar salida, double valor){
+		ClienteDiario cliente = dataBank.buscarDiario(placa);
+		CupoDiario nuevoCupo = null;
+		if(cliente!=null){
+			nuevoCupo = new CupoDiario(cliente,entrada,salida);
+			cliente.setEntradas(cliente.getEntradas()+1);
+			nuevoCupo.calcularTiempoTrans();
+			nuevoCupo.calcularCobro(this.valor);
+			nuevoCupo.setValorCobrado(valor);
+			contabilidad.ingresoEspecial(fecha, nuevoCupo.getValorCobrado(), tipoTrans.diario,placa);
+			nuevoCupo.getCliente().setMinutosReg((long) (nuevoCupo.getCliente().getMinutosReg() + nuevoCupo.getTiempoTranscurrido()));
+			nuevoCupo.getCliente().setCobroTotal((int) (nuevoCupo.getCliente().getCobroTotal() + nuevoCupo.getValorCobrado()));
+			return nuevoCupo;
+		}
+		else{
+			cliente = new ClienteDiario(placa);
+			nuevoCupo = new CupoDiario(cliente,entrada,salida);
+			cliente.setEntradas(cliente.getEntradas()+1);
+			dataBank.adjuntarClienteDiario(cliente);
+			nuevoCupo.calcularTiempoTrans();
+			nuevoCupo.calcularCobro(this.valor);
+			nuevoCupo.setValorCobrado(valor);
+			contabilidad.ingresoEspecial(fecha, nuevoCupo.getValorCobrado(), tipoTrans.diario,placa);
+			nuevoCupo.getCliente().setMinutosReg((long) (nuevoCupo.getCliente().getMinutosReg() + nuevoCupo.getTiempoTranscurrido()));
+			nuevoCupo.getCliente().setCobroTotal((int) (nuevoCupo.getCliente().getCobroTotal() + nuevoCupo.getValorCobrado()));
+			return nuevoCupo;
+		}
 	}
 }

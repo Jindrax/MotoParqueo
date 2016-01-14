@@ -12,9 +12,9 @@ public class Transferencia implements Serializable{
 	 * @param monto
 	 * @param tipo
 	 */
-	public Transferencia(double monto, tipoTrans tipo) {
+	public Transferencia(GregorianCalendar fecha,double monto, tipoTrans tipo) {
 		super();
-		this.fecha = new GregorianCalendar();
+		this.fecha = fecha;
 		this.monto = monto;
 		this.tipo = tipo;
 	}

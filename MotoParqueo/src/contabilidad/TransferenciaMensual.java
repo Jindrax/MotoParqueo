@@ -1,11 +1,13 @@
 package contabilidad;
 
+import java.util.GregorianCalendar;
+
 public class TransferenciaMensual extends Transferencia {
 	private static final long serialVersionUID = 5998493724931568303L;
 	private String placa;
 	private String nombre;
-	public TransferenciaMensual(double monto, tipoTrans tipo, String cedula, String nombre) {
-		super(monto, tipo);
+	public TransferenciaMensual(GregorianCalendar fecha, double monto, tipoTrans tipo, String cedula, String nombre) {
+		super(fecha, monto, tipo);
 		this.placa = cedula;
 		this.nombre = nombre;
 	}

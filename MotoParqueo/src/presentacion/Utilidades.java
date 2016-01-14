@@ -76,4 +76,19 @@ public class Utilidades {
 		}
 		return day + "-" + month + "-" + year;
 	}
+	public static GregorianCalendar fechaConstructor(String fecha, String hora){
+		String[] fechaArray = fecha.split("/");
+		int year = Integer.parseInt(fechaArray[2]);
+		int month = Integer.parseInt(fechaArray[1])-1;
+		int day = Integer.parseInt(fechaArray[0]);
+		GregorianCalendar retorno = new GregorianCalendar(year, month, day);
+		String[] horaArray = hora.split(":");
+		int hour = Integer.parseInt(horaArray[0]);
+		int minute = Integer.parseInt(horaArray[1]);
+		retorno.set(GregorianCalendar.HOUR_OF_DAY, hour);
+		retorno.set(GregorianCalendar.MINUTE, minute);
+		retorno.set(GregorianCalendar.SECOND, 0);
+		retorno.getTimeInMillis();
+		return retorno;
+	}
 }

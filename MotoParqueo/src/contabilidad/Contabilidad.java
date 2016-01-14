@@ -2,6 +2,7 @@ package contabilidad;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import presentacion.Utilidades;
@@ -34,16 +35,22 @@ public class Contabilidad implements Serializable{
 	public void setConsecutivo(long consecutivo) {
 		this.consecutivo = consecutivo;
 	}
-	public void ingreso(double valor, tipoTrans tipo, String placa){
+	public void ingreso(GregorianCalendar fecha, double valor, tipoTrans tipo, String placa){
 		Transferencia ingreso;
-		ingreso = new TransferenciaDiaria(valor, tipoTrans.diario, consecutivo, placa);
+		ingreso = new TransferenciaDiaria(fecha, valor, tipoTrans.diario, consecutivo, placa);
 		consecutivo++;
 		transferencias.add(ingreso);
 		cajaActual += valor;
 	}
-	public void ingreso(double valor, tipoTrans tipo, String cedula, String nombre){
+	public void ingresoEspecial(GregorianCalendar fecha, double valor, tipoTrans tipo, String placa){
 		Transferencia ingreso;
-		ingreso = new TransferenciaMensual(valor, tipoTrans.mensual, cedula, nombre);
+		ingreso = new TransferenciaDiaria(fecha, valor, tipoTrans.diario, consecutivo, placa);
+		consecutivo++;
+		transferencias.add(ingreso);
+	}
+	public void ingreso(GregorianCalendar fecha, double valor, tipoTrans tipo, String cedula, String nombre){
+		Transferencia ingreso;
+		ingreso = new TransferenciaMensual(fecha, valor, tipoTrans.mensual, cedula, nombre);
 		transferencias.add(ingreso);
 	}
 	public List<Transferencia> getDia(String hoy){

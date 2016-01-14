@@ -45,6 +45,15 @@ public class CupoDiario implements Serializable{
 		this.cliente=cliente;
 		this.horaIngreso = new GregorianCalendar();
 	}
+	public CupoDiario(ClienteDiario cliente, GregorianCalendar entrada, GregorianCalendar salida){
+		super();
+		this.serial=id+1;
+		id++;
+		this.lockerAsignado=null;
+		this.cliente=cliente;
+		this.horaIngreso = entrada;
+		this.horaSalida = salida;
+	}
 	public CupoDiario(String placa){
 		super();
 		this.serial=id+1;
@@ -52,6 +61,14 @@ public class CupoDiario implements Serializable{
 		this.cliente = new ClienteDiario(placa);
 		this.horaIngreso = new GregorianCalendar();
 	}
+	public CupoDiario(String placa, GregorianCalendar entrada, GregorianCalendar salida){
+		super();
+		this.serial=id+1;
+		id++;
+		this.cliente = new ClienteDiario(placa);
+		this.horaIngreso = entrada;
+		this.horaSalida = salida;
+	}	
 	public CupoDiario(CupoDiario copia){
 		super();
 		this.serial = copia.getSerial();
@@ -118,6 +135,11 @@ public class CupoDiario implements Serializable{
 	}
 	public double calcularTiempoTrans(){
 		horaSalida = new GregorianCalendar();
+		long tiempoTrans = horaSalida.getTimeInMillis() - horaIngreso.getTimeInMillis();
+		this.tiempoTranscurrido = TimeUnit.MILLISECONDS.toSeconds(tiempoTrans);
+		return this.tiempoTranscurrido;
+	}
+	public double calcularTiempoTransEspecial(){
 		long tiempoTrans = horaSalida.getTimeInMillis() - horaIngreso.getTimeInMillis();
 		this.tiempoTranscurrido = TimeUnit.MILLISECONDS.toSeconds(tiempoTrans);
 		return this.tiempoTranscurrido;
