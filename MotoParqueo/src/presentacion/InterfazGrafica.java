@@ -85,6 +85,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.ImageIcon;
 
 @SuppressWarnings("unused")
 public class InterfazGrafica {
@@ -212,7 +213,7 @@ public class InterfazGrafica {
 				}
 			}
 		});
-		frmMotoparqueo.setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\jhvan\\Downloads\\Logo parqueadero.jpg"));
+		frmMotoparqueo.setIconImage(Toolkit.getDefaultToolkit().getImage(InterfazGrafica.class.getResource("/recursos/logo_parqueadero_ico.png")));
 		frmMotoparqueo.setTitle("MotoParqueo259");
 		frmMotoparqueo.setResizable(false);
 		frmMotoparqueo.setBounds(10, 10, 1420, 843);
@@ -410,6 +411,11 @@ public class InterfazGrafica {
 		textoCascos.setHorizontalAlignment(SwingConstants.RIGHT);
 		textoCascos.setText("0");
 		textoCascos.setColumns(10);
+		
+		JLabel label = new JLabel("");
+		label.setIcon(new ImageIcon(InterfazGrafica.class.getResource("/recursos/Logo parqueadero.jpg")));
+		label.setBounds(1050, 460, 314, 229);
+		panelDiario.add(label);
 		
 		JPanel panelAdmin = new JPanel();
 		panelAdmin.setBackground(Color.YELLOW);
@@ -647,6 +653,12 @@ public class InterfazGrafica {
 		txtMenMensualidad.setColumns(10);
 		txtMenMensualidad.setBounds(1242, 719, 137, 30);
 		panelMensual.add(txtMenMensualidad);
+		
+		JSeparator separator_3 = new JSeparator();
+		separator_3.setForeground(Color.BLACK);
+		separator_3.setBackground(Color.BLACK);
+		separator_3.setBounds(1122, 703, 257, 14);
+		panelMensual.add(separator_3);
 		tabbedPane.addTab("Administracion", null, panelAdmin, null);
 		panelAdmin.setLayout(null);
 		

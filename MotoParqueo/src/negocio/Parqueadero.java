@@ -33,7 +33,7 @@ public class Parqueadero implements Serializable{
 	private CupoDiario cupoDiaAux = null;
 	private int mensualidad = 20000;
 	private long [] valor = {600,900,700};
-	private String lastBackup = null;
+	private String lastBackup = "";
 	/**
 	 * 
 	 */
@@ -236,24 +236,16 @@ public class Parqueadero implements Serializable{
 	}
 	
 	public void backup(){
-		if(lastBackup!=null){
 			GregorianCalendar hoy = new GregorianCalendar();
-			String newBackup = "backup-"+Utilidades.formaterFechaFile(hoy)+"-"+Utilidades.formaterHoraFile(hoy)+".dat";
-			guardar(newBackup);
-			File oldBackup = new File(lastBackup);
+			String oldString = getLastBackup();
+			setLastBackup("backup-"+Utilidades.formaterFechaFile(hoy)+"-"+Utilidades.formaterHoraFile(hoy)+".dat");
+			guardar(getLastBackup());
+			File oldBackup = new File(oldString);
 			try {
 				oldBackup.delete();
 			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, "No se pudo eliminar el archivo.");
 				System.out.println("Excepcion al eliminar el backup anterior." + e.getCause());
 			}
-			lastBackup = newBackup;
-		}else{
-			GregorianCalendar hoy = new GregorianCalendar();
-			String newBackup = "backup-"+Utilidades.formaterFechaFile(hoy)+"-"+Utilidades.formaterHoraFile(hoy)+".dat";
-			guardar(newBackup);
-			lastBackup = newBackup;
-		}
 	}
 	
 	public void guardar() {
@@ -264,6 +256,7 @@ public class Parqueadero implements Serializable{
 			archivo = new FileOutputStream(file);
 			oOStream = new ObjectOutputStream(archivo);
 			idCupoDiario = CupoDiario.getId();
+			backup();
 			oOStream.writeObject(this);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -281,7 +274,6 @@ public class Parqueadero implements Serializable{
 				e.printStackTrace();
 			}
 		}
-		//backup();							TODO proceso bajo demanda.
 	}
 	public void guardar(String nombre) {
 		FileOutputStream archivo = null;
