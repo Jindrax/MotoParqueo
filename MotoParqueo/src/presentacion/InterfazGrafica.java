@@ -158,6 +158,7 @@ public class InterfazGrafica {
 	private JTextField txtAdmVC;
 	private JButton btnAdmCerrarDiaEspecial;
 	private JButton btnAdmIngresar;
+	private JPanel tabAdmHDiario;
 	/**
 	 * Launch the application.
 	 */
@@ -670,39 +671,6 @@ public class InterfazGrafica {
 		tabbedPane.addTab("Administracion", null, panelAdmin, null);
 		panelAdmin.setLayout(null);
 		
-		JLabel lblHistorialDiario = new JLabel("Historial Diario");
-		lblHistorialDiario.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblHistorialDiario.setBounds(10, 11, 127, 24);
-		panelAdmin.add(lblHistorialDiario);
-		
-		scrollHistorial = new JScrollPane();
-		scrollHistorial.addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentShown(ComponentEvent e) {
-				for(CupoDiario next: parqueadero.getDataBank().getHistorialDiario()){
-					Vector fila = new Vector();
-					fila.add(next.getCliente().getPlaca());
-					if (next.getLockerAsignado() == null) {
-						fila.add("Ninguno");
-						fila.add("-");
-					} else {
-						fila.add(next.getLockerAsignado().getIdentificador());
-						fila.add(next.getLockerAsignado().getCantidad());
-					}
-					fila.add(next.getValorCobrado());
-					fila.add(next.getTiempoTranscurrido());
-					rowDatatHistorial.add(fila);
-				}
-				tHistorial = new JTable(rowDatatHistorial, columnastHistorialV);
-				scrollHistorial.setViewportView(tHistorial);
-			}
-		});
-		scrollHistorial.setBounds(10, 46, 1152, 564);
-		panelAdmin.add(scrollHistorial);
-		
-		tHistorial = new JTable(rowDatatHistorial, columnastHistorialV);
-		scrollHistorial.setViewportView(tHistorial);
-		
 		JLabel lblHoraDeCierre = new JLabel("H. Cierre");
 		lblHoraDeCierre.setFont(new Font("Arial", Font.PLAIN, 20));
 		lblHoraDeCierre.setBounds(1172, 545, 87, 24);
@@ -916,14 +884,52 @@ public class InterfazGrafica {
 		JTabbedPane tabbedPane_Adm = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane_Adm.setBorder(null);
 		tabbedPane_Adm.setBackground(Color.YELLOW);
-		tabbedPane_Adm.setBounds(10, 621, 1152, 128);
+		tabbedPane_Adm.setBounds(10, 11, 1152, 738);
 		panelAdmin.add(tabbedPane_Adm);
+		
+		tabAdmHDiario = new JPanel();
+		tabAdmHDiario.setBackground(Color.YELLOW);
+		tabbedPane_Adm.addTab("Historial Diario", null, tabAdmHDiario, null);
+		tabAdmHDiario.setLayout(null);
+		
+		JLabel lblHistorialDiario = new JLabel("Historial Diario");
+		lblHistorialDiario.setBounds(10, 11, 127, 24);
+		tabAdmHDiario.add(lblHistorialDiario);
+		lblHistorialDiario.setFont(new Font("Arial", Font.PLAIN, 20));
+		
+		scrollHistorial = new JScrollPane();
+		scrollHistorial.setBounds(10, 39, 1127, 660);
+		tabAdmHDiario.add(scrollHistorial);
+		scrollHistorial.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent e) {
+				for(CupoDiario next: parqueadero.getDataBank().getHistorialDiario()){
+					Vector fila = new Vector();
+					fila.add(next.getCliente().getPlaca());
+					if (next.getLockerAsignado() == null) {
+						fila.add("Ninguno");
+						fila.add("-");
+					} else {
+						fila.add(next.getLockerAsignado().getIdentificador());
+						fila.add(next.getLockerAsignado().getCantidad());
+					}
+					fila.add(next.getValorCobrado());
+					fila.add(next.getTiempoTranscurrido());
+					rowDatatHistorial.add(fila);
+				}
+				tHistorial = new JTable(rowDatatHistorial, columnastHistorialV);
+				scrollHistorial.setViewportView(tHistorial);
+			}
+		});
+		
+		tHistorial = new JTable(rowDatatHistorial, columnastHistorialV);
+		scrollHistorial.setViewportView(tHistorial);
 		
 		JPanel tabAdmIngreso = new JPanel();
 		tabAdmIngreso.setBorder(null);
-		tabAdmIngreso.setBackground(Color.LIGHT_GRAY);
+		tabAdmIngreso.setBackground(Color.YELLOW);
 		tabbedPane_Adm.addTab("Ingreso especial", null, tabAdmIngreso, null);
-		tabbedPane_Adm.setBackgroundAt(0, Color.YELLOW);
+		tabbedPane_Adm.setBackgroundAt(1, Color.YELLOW);
 		tabAdmIngreso.setLayout(null);
 		
 		txtAdmFecha = new JTextField();
