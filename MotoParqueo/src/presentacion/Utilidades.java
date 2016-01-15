@@ -55,10 +55,13 @@ public class Utilidades {
 		}
 	}
 	public static String formaterHoraFile(GregorianCalendar cal){
+		String retorno;
 		int hora = cal.get(GregorianCalendar.HOUR_OF_DAY);
 		int minuto = cal.get(GregorianCalendar.MINUTE);
 		int segundo = cal.get(GregorianCalendar.SECOND);
-		return ("("+hora+minuto+segundo+")");
+		retorno = String.format("(%2s%2s%2s)", hora,minuto,segundo);
+		retorno = retorno.replace(' ', '0');
+		return retorno;
 	}
 	public static String formaterFechaFile(GregorianCalendar cal){
 		int year = cal.get(GregorianCalendar.YEAR);

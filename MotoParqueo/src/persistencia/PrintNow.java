@@ -3,15 +3,21 @@ package persistencia;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import javax.imageio.ImageIO;
+
 import negocio.CupoDiario;
 import negocio.CupoMensual;
 import negocio.Parqueadero;
@@ -26,6 +32,11 @@ public class PrintNow {
 		Printable contentToPrint = new Printable(){
 			@Override
 			public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
+				BufferedImage img = null;
+				try {
+				    img = ImageIO.read(new File("log6464.png"));
+				} catch (IOException e) {
+				}
 				pageFormat.setOrientation(PageFormat.PORTRAIT);
 				Paper pPaper = pageFormat.getPaper();
 				pPaper.setImageableArea(15, 0, 150 , pPaper.getHeight());
@@ -34,7 +45,9 @@ public class PrintNow {
 				g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
 				g2d.setFont(new Font("Times New Roman", Font.BOLD, 12));
 				if (pageIndex >0){return NO_SUCH_PAGE;} //Only one page
-				int y = 15;
+				int y = 10;
+				g2d.drawImage(img, 36, y, null);
+				y+=84;
 				for (LineaRecibo next: Bill) {
 					g2d.setFont(new Font("Times New Roman", next.mod, next.size));
 					g2d.drawString(next.linea, 0, y);

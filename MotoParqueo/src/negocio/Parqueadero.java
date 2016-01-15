@@ -9,6 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -236,17 +237,22 @@ public class Parqueadero implements Serializable{
 		return retirado;
 	}
 	
+	public void resetBackup(){
+		File folder = new File("backups\\");
+		File[] carpetas = folder.listFiles();
+		//List<File> files = Arrays.asList(carpetas);
+		//Collections.sort(files);
+		Arrays.sort(carpetas);
+		if (carpetas.length>5) {
+			for (int i = 0; i < carpetas.length - 1; i++) {
+				carpetas[i].delete();
+			} 
+		}
+	}
+	
 	public void backup(){
 			GregorianCalendar hoy = new GregorianCalendar();
-			String oldString = getLastBackup();
-			setLastBackup("backup-"+Utilidades.formaterFechaFile(hoy)+"-"+Utilidades.formaterHoraFile(hoy)+".dat");
-			guardar(getLastBackup());
-			File oldBackup = new File(oldString);
-			try {
-				oldBackup.delete();
-			} catch (Exception e) {
-				System.out.println("Excepcion al eliminar el backup anterior." + e.getCause());
-			}
+			guardar("backups\\backup-"+Utilidades.formaterFechaFile(hoy)+"-"+Utilidades.formaterHoraFile(hoy)+".dat");
 	}
 	
 	public void guardar() {
@@ -257,8 +263,9 @@ public class Parqueadero implements Serializable{
 			archivo = new FileOutputStream(file);
 			oOStream = new ObjectOutputStream(archivo);
 			idCupoDiario = CupoDiario.getId();
-			backup();
 			oOStream.writeObject(this);
+			resetBackup();
+			backup();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
