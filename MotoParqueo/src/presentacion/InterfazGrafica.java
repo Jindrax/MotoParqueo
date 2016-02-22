@@ -49,6 +49,7 @@ import contabilidad.TransferenciaDiaria;
 import contabilidad.tipoTrans;
 import javafx.scene.chart.PieChart.Data;
 import javafx.scene.input.KeyCode;
+import persistencia.WinRegistry;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -63,6 +64,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JPopupMenu;
@@ -437,17 +439,9 @@ public class InterfazGrafica {
 						tCons.setText(String.valueOf(parqueadero.getContabilidad().getConsecutivo()));
 						actualizarTHistorial();
 						eTotalCobrado.setText(String.valueOf(parqueadero.getContabilidad().getCajaActual()));
-						if (parqueadero.getValor()!=null) {
-							txtAdmMH.setText(String.valueOf(parqueadero.getValor()[0]));
-							txtAdmUH.setText(String.valueOf(parqueadero.getValor()[1]));
-							txtAdmPH.setText(String.valueOf(parqueadero.getValor()[2]));
-						}else{
-							long [] valor = {600,900,700};
-							parqueadero.setValor(valor);
-							txtAdmMH.setText(String.valueOf(parqueadero.getValor()[0]));
-							txtAdmUH.setText(String.valueOf(parqueadero.getValor()[1]));
-							txtAdmPH.setText(String.valueOf(parqueadero.getValor()[2]));
-						}
+						txtAdmMH.setText(WinRegistry.leerConfig("Moto", "mediaHora"));
+						txtAdmUH.setText(WinRegistry.leerConfig("Moto", "unaHora"));
+						txtAdmPH.setText(WinRegistry.leerConfig("Moto", "porHora"));
 					}else{
 						tabbedPane.setSelectedIndex(0);
 						JOptionPane.showMessageDialog(null, "Clave Errada.");
@@ -768,7 +762,6 @@ public class InterfazGrafica {
 				try {
 					Desktop.getDesktop().open(new File(System.getProperty("user.home")+"\\Documents\\Contabilidad-MotoParqueo"));
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -790,7 +783,7 @@ public class InterfazGrafica {
 		txtAdmMH = new JTextField();
 		txtAdmMH.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				parqueadero.setValor(0, Long.parseLong(txtAdmMH.getText()));
+				WinRegistry.guardarConfig("Moto", "mediaHora", txtAdmMH.getText());
 				JOptionPane.showMessageDialog(null, "Valor actualizado.");
 			}
 		});
@@ -819,7 +812,7 @@ public class InterfazGrafica {
 		});
 		txtAdmUH.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				parqueadero.setValor(0, Long.parseLong(txtAdmUH.getText()));
+				WinRegistry.guardarConfig("Moto", "unaHora", txtAdmUH.getText());
 				JOptionPane.showMessageDialog(null, "Valor actualizado.");
 			}
 		});
@@ -841,7 +834,7 @@ public class InterfazGrafica {
 		});
 		txtAdmPH.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				parqueadero.setValor(0, Long.parseLong(txtAdmPH.getText()));
+				WinRegistry.guardarConfig("Moto", "porHora", txtAdmPH.getText());
 				JOptionPane.showMessageDialog(null, "Valor actualizado.");
 			}
 		});
@@ -1071,15 +1064,11 @@ public class InterfazGrafica {
 			}
 			
 			@Override
-			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-				// TODO Auto-generated method stub
-				
+			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {				
 			}
 			
 			@Override
-			public void popupMenuCanceled(PopupMenuEvent e) {
-				// TODO Auto-generated method stub
-				
+			public void popupMenuCanceled(PopupMenuEvent e) {				
 			}
 		});
         JMenuItem printItemDiario = new JMenuItem("Imprimir");
@@ -1127,13 +1116,11 @@ public class InterfazGrafica {
 			
 			@Override
 			public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void popupMenuCanceled(PopupMenuEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 		});
@@ -1326,7 +1313,6 @@ public class InterfazGrafica {
 				textoValor.setText(String.valueOf(cupo.getValorAsignado()));
 				textoValor.requestFocus();
 			} catch (HeadlessException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}			
 		}

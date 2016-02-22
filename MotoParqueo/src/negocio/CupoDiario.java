@@ -7,17 +7,17 @@ import java.io.Serializable;
 import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
-public class CupoDiario implements Serializable{
+public abstract class CupoDiario implements Serializable{
 	private static final long serialVersionUID = -7597938477870651575L;
-	private static int id = 0;
-	private int serial = 0;
-	private GregorianCalendar horaIngreso;
-	private GregorianCalendar horaSalida;
-	private Locker lockerAsignado;
-	private double valorCobrado = 0;
-	private ClienteDiario cliente;
-	private double tiempoTranscurrido = 0;
-	private double valorAsignado = 0;
+	protected static int id = 0;
+	protected int serial = 0;
+	protected GregorianCalendar horaIngreso;
+	protected GregorianCalendar horaSalida;
+	protected Locker lockerAsignado;
+	protected double valorCobrado = 0;
+	protected ClienteDiario cliente;
+	protected double tiempoTranscurrido = 0;
+	protected double valorAsignado = 0;
 	/**
 	 * @param lockerAsignado
 	 */
@@ -144,25 +144,6 @@ public class CupoDiario implements Serializable{
 		this.tiempoTranscurrido = TimeUnit.MILLISECONDS.toSeconds(tiempoTrans);
 		return this.tiempoTranscurrido;
 	}
-	public double calcularCobro(long [] valor) {
-		this.tiempoTranscurrido = Math.ceil(this.tiempoTranscurrido/60);
-		if(this.tiempoTranscurrido>60){
-			this.valorCobrado=Math.ceil(this.tiempoTranscurrido/60)*valor[2];
-			this.valorAsignado=valorCobrado;
-			return this.valorCobrado;
-		}
-		else{
-			if(this.tiempoTranscurrido<=30){
-				this.valorCobrado=valor[0];
-				this.valorAsignado=valorCobrado;
-				return this.valorCobrado;
-			}
-			else{
-				this.valorCobrado=valor[1];
-				this.valorAsignado=valorCobrado;
-				return this.valorCobrado;
-			}
-		}
-	}
+	public abstract double calcularCobro();
 	
 }

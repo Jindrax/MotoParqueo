@@ -34,7 +34,6 @@ public class Parqueadero implements Serializable{
 	private List<String> baneados = null;
 	private CupoDiario cupoDiaAux = null;
 	private int mensualidad = 20000;
-	private long [] valor = {600,900,700};
 	private String lastBackup = "";
 	/**
 	 * 
@@ -72,12 +71,6 @@ public class Parqueadero implements Serializable{
 			lockers.add(nuevo);
 		}
 		return true;
-	}	
-	public long[] getValor() {
-		return valor;
-	}
-	public void setValor(long[] valor) {
-		this.valor = valor;
 	}
 	public int getMensualidad() {
 		return mensualidad;
@@ -165,7 +158,7 @@ public class Parqueadero implements Serializable{
 					if (next.getCantidad() == 0) {
 						if (cascos<=next.getPreferido()) {
 							next.setCantidad(cascos);
-							nuevoCupo = new CupoDiario(next, cliente);
+							nuevoCupo = new Moto(next, cliente);
 							cliente.setEntradas(cliente.getEntradas() + 1);
 							cuposDiarios.add(nuevoCupo);
 							return nuevoCupo;
@@ -173,12 +166,12 @@ public class Parqueadero implements Serializable{
 					}
 				}
 				JOptionPane.showMessageDialog(null, "No hay mas lockers disponibles.", "Sin lockers disponibles.", JOptionPane.WARNING_MESSAGE);
-				nuevoCupo = new CupoDiario(cliente);
+				nuevoCupo = new Moto(cliente);
 				cliente.setEntradas(cliente.getEntradas()+1);
 				cuposDiarios.add(nuevoCupo);
 				return nuevoCupo;
 			}else{
-				nuevoCupo = new CupoDiario(cliente);
+				nuevoCupo = new Moto(cliente);
 				cliente.setEntradas(cliente.getEntradas()+1);
 				cuposDiarios.add(nuevoCupo);
 				return nuevoCupo;
@@ -192,7 +185,7 @@ public class Parqueadero implements Serializable{
 						if (cascos<=next.getPreferido()) {
 							next.setCantidad(cascos);
 							cliente = new ClienteDiario(placa);
-							nuevoCupo = new CupoDiario(next, cliente);
+							nuevoCupo = new Moto(next, cliente);
 							cliente.setEntradas(cliente.getEntradas() + 1);
 							dataBank.adjuntarClienteDiario(cliente);
 							cuposDiarios.add(nuevoCupo);
@@ -201,12 +194,12 @@ public class Parqueadero implements Serializable{
 					}
 				}
 				JOptionPane.showMessageDialog(null, "No hay mas lockers disponibles.", "Sin lockers disponibles.", JOptionPane.WARNING_MESSAGE);
-				nuevoCupo = new CupoDiario(cliente);
+				nuevoCupo = new Moto(cliente);
 				cliente.setEntradas(cliente.getEntradas()+1);
 				cuposDiarios.add(nuevoCupo);
 				return nuevoCupo;
 			}else{
-				nuevoCupo = new CupoDiario(cliente);
+				nuevoCupo = new Moto(cliente);
 				cliente.setEntradas(cliente.getEntradas()+1);
 				dataBank.adjuntarClienteDiario(cliente);
 				cuposDiarios.add(nuevoCupo);
@@ -220,7 +213,7 @@ public class Parqueadero implements Serializable{
 		for(CupoDiario next: cuposDiarios){
 			if(next.getSerial()==serial){				
 				next.calcularTiempoTrans();
-				next.calcularCobro(this.valor);
+				next.calcularCobro();
 				dataBank.registrarCupoDiario(next);
 				retirado = next;
 			}
@@ -240,8 +233,6 @@ public class Parqueadero implements Serializable{
 	public void resetBackup(){
 		File folder = new File("backups\\");
 		File[] carpetas = folder.listFiles();
-		//List<File> files = Arrays.asList(carpetas);
-		//Collections.sort(files);
 		Arrays.sort(carpetas);
 		if (carpetas.length>5) {
 			for (int i = 0; i < carpetas.length - 1; i++) {
@@ -267,10 +258,8 @@ public class Parqueadero implements Serializable{
 			resetBackup();
 			backup();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		finally {
@@ -278,7 +267,6 @@ public class Parqueadero implements Serializable{
 				oOStream.close();
 				archivo.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -293,10 +281,8 @@ public class Parqueadero implements Serializable{
 			idCupoDiario = CupoDiario.getId();
 			oOStream.writeObject(this);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		finally {
@@ -304,7 +290,6 @@ public class Parqueadero implements Serializable{
 				oOStream.close();
 				archivo.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}	
@@ -426,12 +411,6 @@ public class Parqueadero implements Serializable{
 			return false;
 		}		
 	}
-	public void setValor(int pos, long val){
-		this.valor[pos] = val;
-	}
-	public long getValor(int pos){
-		return this.valor[pos];
-	}
 	public CupoDiario resucitar(String placa){
 		CupoDiario cupo = dataBank.buscarCupoDiario(placa);
 		if (cupo!=null) {
@@ -480,10 +459,10 @@ public class Parqueadero implements Serializable{
 		ClienteDiario cliente = dataBank.buscarDiario(placa);
 		CupoDiario nuevoCupo = null;
 		if(cliente!=null){
-			nuevoCupo = new CupoDiario(cliente,entrada,salida);
+			nuevoCupo = new Moto(cliente,entrada,salida);
 			cliente.setEntradas(cliente.getEntradas()+1);
 			nuevoCupo.calcularTiempoTrans();
-			nuevoCupo.calcularCobro(this.valor);
+			nuevoCupo.calcularCobro();
 			contabilidad.ingresoEspecial(fecha, nuevoCupo.getValorCobrado(), tipoTrans.diario,placa);
 			nuevoCupo.getCliente().setMinutosReg((long) (nuevoCupo.getCliente().getMinutosReg() + nuevoCupo.getTiempoTranscurrido()));
 			nuevoCupo.getCliente().setCobroTotal((int) (nuevoCupo.getCliente().getCobroTotal() + nuevoCupo.getValorCobrado()));
@@ -491,11 +470,11 @@ public class Parqueadero implements Serializable{
 		}
 		else{
 			cliente = new ClienteDiario(placa);
-			nuevoCupo = new CupoDiario(cliente,entrada,salida);
+			nuevoCupo = new Moto(cliente,entrada,salida);
 			cliente.setEntradas(cliente.getEntradas()+1);
 			dataBank.adjuntarClienteDiario(cliente);
 			nuevoCupo.calcularTiempoTransEspecial();
-			nuevoCupo.calcularCobro(this.valor);
+			nuevoCupo.calcularCobro();
 			contabilidad.ingresoEspecial(fecha, nuevoCupo.getValorCobrado(), tipoTrans.diario,placa);
 			nuevoCupo.getCliente().setMinutosReg((long) (nuevoCupo.getCliente().getMinutosReg() + nuevoCupo.getTiempoTranscurrido()));
 			nuevoCupo.getCliente().setCobroTotal((int) (nuevoCupo.getCliente().getCobroTotal() + nuevoCupo.getValorCobrado()));
@@ -506,10 +485,10 @@ public class Parqueadero implements Serializable{
 		ClienteDiario cliente = dataBank.buscarDiario(placa);
 		CupoDiario nuevoCupo = null;
 		if(cliente!=null){
-			nuevoCupo = new CupoDiario(cliente,entrada,salida);
+			nuevoCupo = new Moto(cliente,entrada,salida);
 			cliente.setEntradas(cliente.getEntradas()+1);
 			nuevoCupo.calcularTiempoTrans();
-			nuevoCupo.calcularCobro(this.valor);
+			nuevoCupo.calcularCobro();
 			nuevoCupo.setValorCobrado(valor);
 			contabilidad.ingresoEspecial(fecha, nuevoCupo.getValorCobrado(), tipoTrans.diario,placa);
 			nuevoCupo.getCliente().setMinutosReg((long) (nuevoCupo.getCliente().getMinutosReg() + nuevoCupo.getTiempoTranscurrido()));
@@ -518,11 +497,11 @@ public class Parqueadero implements Serializable{
 		}
 		else{
 			cliente = new ClienteDiario(placa);
-			nuevoCupo = new CupoDiario(cliente,entrada,salida);
+			nuevoCupo = new Moto(cliente,entrada,salida);
 			cliente.setEntradas(cliente.getEntradas()+1);
 			dataBank.adjuntarClienteDiario(cliente);
 			nuevoCupo.calcularTiempoTrans();
-			nuevoCupo.calcularCobro(this.valor);
+			nuevoCupo.calcularCobro();
 			nuevoCupo.setValorCobrado(valor);
 			contabilidad.ingresoEspecial(fecha, nuevoCupo.getValorCobrado(), tipoTrans.diario,placa);
 			nuevoCupo.getCliente().setMinutosReg((long) (nuevoCupo.getCliente().getMinutosReg() + nuevoCupo.getTiempoTranscurrido()));
