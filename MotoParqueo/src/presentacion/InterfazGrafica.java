@@ -192,6 +192,7 @@ public class InterfazGrafica {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void initialize() {
+		WinRegistry.inicializarConfig();
 		frmMotoparqueo = new JFrame();
 		frmMotoparqueo.getContentPane().setBackground(Color.BLACK);
 		frmMotoparqueo.setFont(new Font("Arial", Font.PLAIN, 18));
@@ -1405,8 +1406,7 @@ public class InterfazGrafica {
 				}
 			} else {
 				try {
-					CupoDiario cupo = parqueadero
-							.retirarDiario(Integer.parseInt(textoPlaca.getText().toUpperCase().trim()));
+					CupoDiario cupo = parqueadero.retirarDiario(Integer.parseInt(textoPlaca.getText().toUpperCase().trim()));
 					if (cupo != null) {
 						textoValor.setText(String.valueOf(cupo.getValorCobrado()));
 						actualizarTMotoDiario();

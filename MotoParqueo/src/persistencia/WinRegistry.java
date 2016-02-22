@@ -388,10 +388,16 @@ public class WinRegistry {
     result[str.length()] = 0;
     return result;
   }
-  public void inicializarConfig(){
+  public static void inicializarConfig(){
 		try {
 			if(WinRegistry.readStringSubKeys(user, regkey)==null){
 				WinRegistry.createKey(user, regkey);
+			}
+			if(WinRegistry.readStringSubKeys(user, regkey+"\\Moto")==null){
+				WinRegistry.createKey(user, regkey+"\\Moto");
+			}
+			if(WinRegistry.readStringSubKeys(user, regkey+"\\Carro")==null){
+				WinRegistry.createKey(user, regkey+"\\Carro");
 			}
 			if(WinRegistry.readString(user, regkey+"\\Moto", "mediaHora")==null){
 				WinRegistry.writeStringValue(user, regkey+"\\Moto", "mediaHora", "600");
