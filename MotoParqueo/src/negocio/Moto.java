@@ -24,6 +24,7 @@ public class Moto extends CupoDiario {
 	 */
 	public Moto(Locker lockerAsignado, String placa) {
 		super(lockerAsignado, placa);
+		tipo="M";
 	}
 
 	/**
@@ -32,6 +33,7 @@ public class Moto extends CupoDiario {
 	 */
 	public Moto(Locker lockerAsignado, ClienteDiario cliente) {
 		super(lockerAsignado, cliente);
+		tipo="M";
 	}
 
 	/**
@@ -39,6 +41,7 @@ public class Moto extends CupoDiario {
 	 */
 	public Moto(ClienteDiario cliente) {
 		super(cliente);
+		tipo="M";
 	}
 
 	/**
@@ -48,6 +51,7 @@ public class Moto extends CupoDiario {
 	 */
 	public Moto(ClienteDiario cliente, GregorianCalendar entrada, GregorianCalendar salida) {
 		super(cliente, entrada, salida);
+		tipo="M";
 	}
 
 	/**
@@ -55,6 +59,7 @@ public class Moto extends CupoDiario {
 	 */
 	public Moto(String placa) {
 		super(placa);
+		tipo="M";
 	}
 
 	/**
@@ -64,6 +69,7 @@ public class Moto extends CupoDiario {
 	 */
 	public Moto(String placa, GregorianCalendar entrada, GregorianCalendar salida) {
 		super(placa, entrada, salida);
+		tipo="M";
 	}
 
 	/**
@@ -71,6 +77,7 @@ public class Moto extends CupoDiario {
 	 */
 	public Moto(CupoDiario copia) {
 		super(copia);
+		tipo="M";
 	}
 	public double calcularCobro(){
 		long mediaHora = Long.parseLong(WinRegistry.leerConfig("Moto", "mediaHora")),

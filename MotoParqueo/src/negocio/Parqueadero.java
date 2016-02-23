@@ -149,61 +149,82 @@ public class Parqueadero implements Serializable{
 	public void setIdCupoDiario(int idCupoDiario) {
 		this.idCupoDiario = idCupoDiario;
 	}
-	public CupoDiario ingresarDiario(String placa, int cascos){
+	public CupoDiario ingresarDiario(String placa, int cascos, char tipo){
 		ClienteDiario cliente = dataBank.buscarDiario(placa);
 		CupoDiario nuevoCupo = null;
 		if(cliente!=null){
-			if (cascos>0) {
-				for (Locker next : lockers) {
-					if (next.getCantidad() == 0) {
-						if (cascos<=next.getPreferido()) {
-							next.setCantidad(cascos);
-							nuevoCupo = new Moto(next, cliente);
-							cliente.setEntradas(cliente.getEntradas() + 1);
-							cuposDiarios.add(nuevoCupo);
-							return nuevoCupo;
+			switch (tipo) {
+			case 'M':
+				if (cascos>0) {
+					for (Locker next : lockers) {
+						if (next.getCantidad() == 0) {
+							if (cascos<=next.getPreferido()) {
+								next.setCantidad(cascos);
+								nuevoCupo = new Moto(next, cliente);
+								cliente.setEntradas(cliente.getEntradas() + 1);
+								cuposDiarios.add(nuevoCupo);
+								return nuevoCupo;
+							}
 						}
 					}
+					JOptionPane.showMessageDialog(null, "No hay mas lockers disponibles.", "Sin lockers disponibles.", JOptionPane.WARNING_MESSAGE);
+					nuevoCupo = new Moto(cliente);
+					cliente.setEntradas(cliente.getEntradas()+1);
+					cuposDiarios.add(nuevoCupo);
+					return nuevoCupo;
+				}else{
+					nuevoCupo = new Moto(cliente);
+					cliente.setEntradas(cliente.getEntradas()+1);
+					cuposDiarios.add(nuevoCupo);
+					return nuevoCupo;
 				}
-				JOptionPane.showMessageDialog(null, "No hay mas lockers disponibles.", "Sin lockers disponibles.", JOptionPane.WARNING_MESSAGE);
-				nuevoCupo = new Moto(cliente);
+			case 'C':
+				nuevoCupo = new Carro(cliente);
 				cliente.setEntradas(cliente.getEntradas()+1);
 				cuposDiarios.add(nuevoCupo);
 				return nuevoCupo;
-			}else{
-				nuevoCupo = new Moto(cliente);
-				cliente.setEntradas(cliente.getEntradas()+1);
-				cuposDiarios.add(nuevoCupo);
-				return nuevoCupo;
+			default:
+				return null;
 			}
 		}
 		else{
 			cliente = new ClienteDiario(placa);
-			if (cascos>0) {
-				for (Locker next : lockers) {
-					if (next.getCantidad() == 0) {
-						if (cascos<=next.getPreferido()) {
-							next.setCantidad(cascos);
-							cliente = new ClienteDiario(placa);
-							nuevoCupo = new Moto(next, cliente);
-							cliente.setEntradas(cliente.getEntradas() + 1);
-							dataBank.adjuntarClienteDiario(cliente);
-							cuposDiarios.add(nuevoCupo);
-							return nuevoCupo;
+			switch (tipo) {
+			case 'M':
+				if (cascos>0) {
+					for (Locker next : lockers) {
+						if (next.getCantidad() == 0) {
+							if (cascos<=next.getPreferido()) {
+								next.setCantidad(cascos);
+								cliente = new ClienteDiario(placa);
+								nuevoCupo = new Moto(next, cliente);
+								cliente.setEntradas(cliente.getEntradas() + 1);
+								dataBank.adjuntarClienteDiario(cliente);
+								cuposDiarios.add(nuevoCupo);
+								return nuevoCupo;
+							}
 						}
 					}
+					JOptionPane.showMessageDialog(null, "No hay mas lockers disponibles.", "Sin lockers disponibles.", JOptionPane.WARNING_MESSAGE);
+					nuevoCupo = new Moto(cliente);
+					cliente.setEntradas(cliente.getEntradas()+1);
+					cuposDiarios.add(nuevoCupo);
+					return nuevoCupo;
+				}else{
+					nuevoCupo = new Moto(cliente);
+					cliente.setEntradas(cliente.getEntradas()+1);
+					dataBank.adjuntarClienteDiario(cliente);
+					cuposDiarios.add(nuevoCupo);
+					return nuevoCupo;
 				}
-				JOptionPane.showMessageDialog(null, "No hay mas lockers disponibles.", "Sin lockers disponibles.", JOptionPane.WARNING_MESSAGE);
-				nuevoCupo = new Moto(cliente);
-				cliente.setEntradas(cliente.getEntradas()+1);
-				cuposDiarios.add(nuevoCupo);
-				return nuevoCupo;
-			}else{
-				nuevoCupo = new Moto(cliente);
+			case 'C':
+				nuevoCupo = new Carro(cliente);
 				cliente.setEntradas(cliente.getEntradas()+1);
 				dataBank.adjuntarClienteDiario(cliente);
 				cuposDiarios.add(nuevoCupo);
 				return nuevoCupo;
+			default:
+				return null;
 			}
 		}
 	}

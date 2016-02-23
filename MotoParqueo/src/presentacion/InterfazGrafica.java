@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import negocio.Config;
 import negocio.CupoDiario;
 import negocio.CupoMensual;
+import negocio.Moto;
 import negocio.Parqueadero;
 import persistencia.CreateExlFile;
 import persistencia.PrintNow;
@@ -97,7 +98,7 @@ public class InterfazGrafica {
 	private static Parqueadero parqueadero = null;
 	private JScrollPane scrollPaneDiario;
 	private JTable tableMotosDiario;
-	private String[] columnastableMotosDiarioS = {"Recibo","Placa","Locker","Cascos","Entrada","Cliente"};
+	private String[] columnastableMotosDiarioS = {"Recibo","Placa","Tipo","Locker","Cascos","Entrada","Cliente"};
 	private String[] columnastHistorialS = {"Placa", "Locker", "Cantidad", "Pagado", "Tiempo","Entrada","Salida"};
 	private String[] columnastMensualS = {"Nombre","Placa","Celular", "Sig.Cobro"};
 	@SuppressWarnings("rawtypes")
@@ -1374,36 +1375,46 @@ public class InterfazGrafica {
 		return false;
 	}
 
-	protected void procesoPrincipal() {
-		if (!textoPlaca.getText().startsWith("!")) {
-			if (textoPlaca.getText().length() >= 5) {
-				if (!isBanned(textoPlaca.getText())) {
-					String placa = textoPlaca.getText().toUpperCase().trim();
-					try {
-						int cascos = Integer.parseInt(textoCascos.getText());
-						if (!placa.equals("")) {
-							CupoDiario cupo = parqueadero.ingresarDiario(placa, cascos);
-							PrintNow.imprimirReciboEntrada(cupo);
-							actualizarTMotoDiario();
-							textoPlaca.setText("");
-							textoCascos.setText("0");
-							textoPlaca.requestFocus();
-						} else {
-							JOptionPane.showMessageDialog(null, "No puede dejar la placa vacia.");
-							textoPlaca.requestFocus();
-							textoPlaca.selectAll();
-						}
-					} catch (NumberFormatException e) {
-						JOptionPane.showMessageDialog(null, "Formato invalido de cascos.");
-						textoCascos.requestFocus();
-						textoCascos.selectAll();
+	protected void ingresarVehiculo(String input){
+		char tipo = input.charAt(0);
+		input = input.substring(1, input.length());
+		if (!isBanned(input)) {
+			String placa = input;
+			try {
+				int cascos = Integer.parseInt(textoCascos.getText().trim());
+				if (!placa.equals("")) {
+					CupoDiario cupo = parqueadero.ingresarDiario(placa, cascos, tipo);
+					if (cupo!=null) {
+						PrintNow.imprimirReciboEntrada(cupo);
+						actualizarTMotoDiario();
+					}else{
+						JOptionPane.showMessageDialog(null, "Tipo de vehiculo no reconocido.");
 					}
-				} else {
-					JOptionPane.showMessageDialog(null, "Esta placa esta prohibida en el negocio.");
 					textoPlaca.setText("");
 					textoCascos.setText("0");
 					textoPlaca.requestFocus();
+				} else {
+					JOptionPane.showMessageDialog(null, "No puede dejar la placa vacia.");
+					textoPlaca.requestFocus();
+					textoPlaca.selectAll();
 				}
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(null, "Formato invalido de cascos.");
+				textoCascos.requestFocus();
+				textoCascos.selectAll();
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "Esta placa esta prohibida en el negocio.");
+			textoPlaca.setText("");
+			textoCascos.setText("0");
+			textoPlaca.requestFocus();
+		}
+	}
+	
+	protected void procesoPrincipal() {
+		if (!textoPlaca.getText().startsWith("!")) {
+			if (textoPlaca.getText().length() >= 5) {
+				ingresarVehiculo(textoPlaca.getText().toUpperCase().trim());		//Ingresa el vehiculo segun el tipo.
 			} else {
 				try {
 					CupoDiario cupo = parqueadero.retirarDiario(Integer.parseInt(textoPlaca.getText().toUpperCase().trim()));
@@ -1462,6 +1473,7 @@ public class InterfazGrafica {
 				Vector fila = new Vector();
 				fila.add(next.getSerial());
 				fila.add(next.getCliente().getPlaca());
+				fila.add(next.getTipo());
 				if (next.getLockerAsignado() == null) {
 					fila.add("Ninguno");
 					fila.add("-");

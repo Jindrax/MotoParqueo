@@ -18,6 +18,7 @@ public abstract class CupoDiario implements Serializable{
 	protected ClienteDiario cliente;
 	protected double tiempoTranscurrido = 0;
 	protected double valorAsignado = 0;
+	protected String tipo;
 	/**
 	 * @param lockerAsignado
 	 */
@@ -145,5 +146,10 @@ public abstract class CupoDiario implements Serializable{
 		return this.tiempoTranscurrido;
 	}
 	public abstract double calcularCobro();
-	
+	public String getTipo() {
+		return tipo;
+	}
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
 }
