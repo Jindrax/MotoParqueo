@@ -162,6 +162,9 @@ public class InterfazGrafica {
 	private JButton btnAdmCerrarDiaEspecial;
 	private JButton btnAdmIngresar;
 	private JPanel tabAdmHDiario;
+	private JTextField txtCarroporHora;
+	private JTextField txtCarroporFraccion;
+	private JTextField txtCarrotFraccion;
 	/**
 	 * Launch the application.
 	 */
@@ -444,6 +447,9 @@ public class InterfazGrafica {
 						txtAdmMH.setText(WinRegistry.leerConfig("Moto", "mediaHora"));
 						txtAdmUH.setText(WinRegistry.leerConfig("Moto", "unaHora"));
 						txtAdmPH.setText(WinRegistry.leerConfig("Moto", "porHora"));
+						txtCarroporHora.setText(WinRegistry.leerConfig("Carro", "porHora"));
+						txtCarroporFraccion.setText(WinRegistry.leerConfig("Carro", "porFraccion"));
+						txtCarrotFraccion.setText(WinRegistry.leerConfig("Carro", "tiempoFraccion"));
 					}else{
 						tabbedPane.setSelectedIndex(0);
 						JOptionPane.showMessageDialog(null, "Clave Errada.");
@@ -772,110 +778,6 @@ public class InterfazGrafica {
 		btnAdmAbrirCarpeta.setBounds(1172, 716, 207, 33);
 		panelAdmin.add(btnAdmAbrirCarpeta);
 		
-		JPanel panel = new JPanel();
-		panel.setBackground(Color.YELLOW);
-		panel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) Color.LIGHT_GRAY));
-		panel.setBounds(1172, 46, 207, 412);
-		panelAdmin.add(panel);
-		
-		JLabel lblAdmMedHora = new JLabel("Media Hora:");
-		lblAdmMedHora.setBounds(5, 11, 191, 24);
-		lblAdmMedHora.setFont(new Font("Arial", Font.PLAIN, 20));
-		
-		txtAdmMH = new JTextField();
-		txtAdmMH.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				WinRegistry.guardarConfig("Moto", "mediaHora", txtAdmMH.getText());
-				JOptionPane.showMessageDialog(null, "Valor actualizado.");
-			}
-		});
-		txtAdmMH.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				txtAdmMH.selectAll();
-			}
-		});
-		txtAdmMH.setBounds(5, 55, 191, 30);
-		txtAdmMH.setHorizontalAlignment(SwingConstants.RIGHT);
-		txtAdmMH.setFont(new Font("Arial", Font.PLAIN, 20));
-		txtAdmMH.setColumns(10);
-		lblAdmMedHora.setLabelFor(txtAdmMH);
-		
-		JLabel lblAdmUH = new JLabel("Una Hora:");
-		lblAdmUH.setBounds(5, 105, 192, 24);
-		lblAdmUH.setFont(new Font("Arial", Font.PLAIN, 20));
-		
-		txtAdmUH = new JTextField();
-		txtAdmUH.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				txtAdmUH.selectAll();
-			}
-		});
-		txtAdmUH.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				WinRegistry.guardarConfig("Moto", "unaHora", txtAdmUH.getText());
-				JOptionPane.showMessageDialog(null, "Valor actualizado.");
-			}
-		});
-		txtAdmUH.setBounds(5, 149, 191, 30);
-		txtAdmUH.setHorizontalAlignment(SwingConstants.RIGHT);
-		txtAdmUH.setFont(new Font("Arial", Font.PLAIN, 20));
-		txtAdmUH.setColumns(10);
-		
-		JLabel lblAdmPH = new JLabel("Por Hora:");
-		lblAdmPH.setBounds(5, 199, 191, 24);
-		lblAdmPH.setFont(new Font("Arial", Font.PLAIN, 20));
-		
-		txtAdmPH = new JTextField();
-		txtAdmPH.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				txtAdmPH.selectAll();
-			}
-		});
-		txtAdmPH.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				WinRegistry.guardarConfig("Moto", "porHora", txtAdmPH.getText());
-				JOptionPane.showMessageDialog(null, "Valor actualizado.");
-			}
-		});
-		txtAdmPH.setBounds(5, 243, 191, 30);
-		txtAdmPH.setHorizontalAlignment(SwingConstants.RIGHT);
-		txtAdmPH.setFont(new Font("Arial", Font.PLAIN, 20));
-		txtAdmPH.setColumns(10);
-		
-		lblTotalCobrado = new JLabel("Total Cobrado:");
-		lblTotalCobrado.setBounds(5, 284, 198, 30);
-		lblTotalCobrado.setFont(new Font("Arial", Font.PLAIN, 26));
-		
-		eTotalCobrado = new JLabel("0");
-		eTotalCobrado.setBounds(5, 325, 192, 30);
-		eTotalCobrado.setBackground(Color.WHITE);
-		eTotalCobrado.setForeground(Color.BLACK);
-		eTotalCobrado.addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentShown(ComponentEvent e) {
-				eTotalCobrado.setText(String.valueOf(parqueadero.getContabilidad().getCajaActual()));
-			}
-		});
-		eTotalCobrado.setFont(new Font("Arial", Font.PLAIN, 26));
-		eTotalCobrado.setHorizontalAlignment(SwingConstants.RIGHT);
-		
-		btnTest = new JButton("Cerrar Dia");
-		btnTest.setBounds(5, 368, 198, 33);
-		btnTest.setFont(new Font("Arial", Font.PLAIN, 20));
-		panel.setLayout(null);
-		panel.add(lblAdmMedHora);
-		panel.add(txtAdmMH);
-		panel.add(lblAdmUH);
-		panel.add(txtAdmUH);
-		panel.add(lblAdmPH);
-		panel.add(txtAdmPH);
-		panel.add(lblTotalCobrado);
-		panel.add(eTotalCobrado);
-		panel.add(btnTest);
-		
 		JTabbedPane tabbedPane_Adm = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane_Adm.setBorder(null);
 		tabbedPane_Adm.setBackground(Color.YELLOW);
@@ -1033,6 +935,173 @@ public class InterfazGrafica {
 		btnAdmCerrarDiaEspecial.setFont(new Font("Arial", Font.PLAIN, 20));
 		btnAdmCerrarDiaEspecial.setBounds(850, 58, 268, 32);
 		tabAdmIngreso.add(btnAdmCerrarDiaEspecial);
+		
+		lblTotalCobrado = new JLabel("Total Cobrado:");
+		lblTotalCobrado.setBounds(1181, 334, 198, 30);
+		panelAdmin.add(lblTotalCobrado);
+		lblTotalCobrado.setFont(new Font("Arial", Font.PLAIN, 26));
+		
+		eTotalCobrado = new JLabel("0");
+		eTotalCobrado.setBounds(1181, 375, 192, 30);
+		panelAdmin.add(eTotalCobrado);
+		eTotalCobrado.setBackground(Color.WHITE);
+		eTotalCobrado.setForeground(Color.BLACK);
+		eTotalCobrado.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent e) {
+				eTotalCobrado.setText(String.valueOf(parqueadero.getContabilidad().getCajaActual()));
+			}
+		});
+		eTotalCobrado.setFont(new Font("Arial", Font.PLAIN, 26));
+		eTotalCobrado.setHorizontalAlignment(SwingConstants.RIGHT);
+		
+		btnTest = new JButton("Cerrar Dia");
+		btnTest.setBounds(1181, 418, 198, 33);
+		panelAdmin.add(btnTest);
+		btnTest.setFont(new Font("Arial", Font.PLAIN, 20));
+		
+		JTabbedPane tabbedPane_1 = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane_1.setBounds(1172, 11, 205, 314);
+		panelAdmin.add(tabbedPane_1);
+		
+		JPanel panel = new JPanel();
+		tabbedPane_1.addTab("Motos", null, panel, null);
+		panel.setBackground(Color.YELLOW);
+		panel.setBorder(null);
+		
+		JLabel lblAdmMedHora = new JLabel("Media Hora:");
+		lblAdmMedHora.setBounds(12, 13, 176, 24);
+		lblAdmMedHora.setFont(new Font("Arial", Font.PLAIN, 20));
+		
+		txtAdmMH = new JTextField();
+		txtAdmMH.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				WinRegistry.guardarConfig("Moto", "mediaHora", txtAdmMH.getText());
+				JOptionPane.showMessageDialog(null, "Valor actualizado.");
+			}
+		});
+		txtAdmMH.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				txtAdmMH.selectAll();
+			}
+		});
+		txtAdmMH.setBounds(12, 50, 176, 30);
+		txtAdmMH.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtAdmMH.setFont(new Font("Arial", Font.PLAIN, 20));
+		txtAdmMH.setColumns(10);
+		lblAdmMedHora.setLabelFor(txtAdmMH);
+		
+		JLabel lblAdmUH = new JLabel("Una Hora:");
+		lblAdmUH.setBounds(12, 93, 176, 24);
+		lblAdmUH.setFont(new Font("Arial", Font.PLAIN, 20));
+		
+		txtAdmUH = new JTextField();
+		txtAdmUH.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				txtAdmUH.selectAll();
+			}
+		});
+		txtAdmUH.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				WinRegistry.guardarConfig("Moto", "unaHora", txtAdmUH.getText());
+				JOptionPane.showMessageDialog(null, "Valor actualizado.");
+			}
+		});
+		txtAdmUH.setBounds(12, 130, 176, 30);
+		txtAdmUH.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtAdmUH.setFont(new Font("Arial", Font.PLAIN, 20));
+		txtAdmUH.setColumns(10);
+		
+		JLabel lblAdmPH = new JLabel("Por Hora:");
+		lblAdmPH.setBounds(12, 173, 176, 24);
+		lblAdmPH.setFont(new Font("Arial", Font.PLAIN, 20));
+		
+		txtAdmPH = new JTextField();
+		txtAdmPH.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				txtAdmPH.selectAll();
+			}
+		});
+		txtAdmPH.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				WinRegistry.guardarConfig("Moto", "porHora", txtAdmPH.getText());
+				JOptionPane.showMessageDialog(null, "Valor actualizado.");
+			}
+		});
+		txtAdmPH.setBounds(12, 210, 176, 30);
+		txtAdmPH.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtAdmPH.setFont(new Font("Arial", Font.PLAIN, 20));
+		txtAdmPH.setColumns(10);
+		panel.setLayout(null);
+		panel.add(lblAdmMedHora);
+		panel.add(txtAdmMH);
+		panel.add(lblAdmUH);
+		panel.add(txtAdmUH);
+		panel.add(lblAdmPH);
+		panel.add(txtAdmPH);
+		
+		JPanel panel_4 = new JPanel();
+		panel_4.setBackground(Color.YELLOW);
+		tabbedPane_1.addTab("Carros", null, panel_4, null);
+		tabbedPane_1.setBackgroundAt(1, Color.YELLOW);
+		panel_4.setLayout(null);
+		
+		JLabel lblPorHora = new JLabel("Por Hora:");
+		lblPorHora.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblPorHora.setBounds(12, 13, 176, 24);
+		panel_4.add(lblPorHora);
+		
+		txtCarroporHora = new JTextField();
+		txtCarroporHora.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				WinRegistry.guardarConfig("Carro", "porHora", txtCarroporHora.getText());
+				JOptionPane.showMessageDialog(null, "Valor actualizado.");
+			}
+		});
+		txtCarroporHora.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtCarroporHora.setFont(new Font("Arial", Font.PLAIN, 20));
+		txtCarroporHora.setColumns(10);
+		txtCarroporHora.setBounds(12, 50, 176, 30);
+		panel_4.add(txtCarroporHora);
+		
+		JLabel lblFraccion = new JLabel("Fraccion:");
+		lblFraccion.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblFraccion.setBounds(12, 93, 176, 24);
+		panel_4.add(lblFraccion);
+		
+		txtCarroporFraccion = new JTextField();
+		txtCarroporFraccion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				WinRegistry.guardarConfig("Carro", "porFraccion", txtCarroporFraccion.getText());
+				JOptionPane.showMessageDialog(null, "Valor actualizado.");
+			}
+		});
+		txtCarroporFraccion.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtCarroporFraccion.setFont(new Font("Arial", Font.PLAIN, 20));
+		txtCarroporFraccion.setColumns(10);
+		txtCarroporFraccion.setBounds(12, 130, 176, 30);
+		panel_4.add(txtCarroporFraccion);
+		
+		txtCarrotFraccion = new JTextField();
+		txtCarrotFraccion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				WinRegistry.guardarConfig("Carro", "tiempoFraccion", txtCarrotFraccion.getText());
+				JOptionPane.showMessageDialog(null, "Valor actualizado.");
+			}
+		});
+		txtCarrotFraccion.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtCarrotFraccion.setFont(new Font("Arial", Font.PLAIN, 20));
+		txtCarrotFraccion.setColumns(10);
+		txtCarrotFraccion.setBounds(12, 211, 176, 30);
+		panel_4.add(txtCarrotFraccion);
+		
+		JLabel lblTiempoFraccionm = new JLabel("t Fraccion (m):");
+		lblTiempoFraccionm.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblTiempoFraccionm.setBounds(12, 174, 176, 24);
+		panel_4.add(lblTiempoFraccionm);
 		btnTest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cerrarDia();
@@ -1540,5 +1609,14 @@ public class InterfazGrafica {
 	}
 	public JButton getBtnAdmIngresar() {
 		return btnAdmIngresar;
+	}
+	public JTextField getTxtCarroporHora() {
+		return txtCarroporHora;
+	}
+	public JTextField getTxtCarroporFraccion() {
+		return txtCarroporFraccion;
+	}
+	public JTextField getTxtCarrotFraccion() {
+		return txtCarrotFraccion;
 	}
 }
