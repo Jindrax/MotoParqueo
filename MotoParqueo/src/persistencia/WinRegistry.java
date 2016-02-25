@@ -399,6 +399,9 @@ public class WinRegistry {
 			if(WinRegistry.readStringSubKeys(user, regkey+"\\Carro")==null){
 				WinRegistry.createKey(user, regkey+"\\Carro");
 			}
+			if(WinRegistry.readStringSubKeys(user, regkey+"\\Lockers")==null){
+				WinRegistry.createKey(user, regkey+"\\Lockers");
+			}
 			if(WinRegistry.readString(user, regkey+"\\Moto", "mediaHora")==null){
 				WinRegistry.writeStringValue(user, regkey+"\\Moto", "mediaHora", "600");
 			}
@@ -419,6 +422,15 @@ public class WinRegistry {
 			}
 			if(WinRegistry.readString(user, regkey+"\\Carro", "tiempoFraccion")==null){
 				WinRegistry.writeStringValue(user, regkey+"\\Carro", "tiempoFraccion", "30");
+			}
+			if(WinRegistry.readString(user, regkey, "admPass")==null){
+				WinRegistry.writeStringValue(user, regkey, "admPass", "123456");
+			}
+			if(WinRegistry.readString(user, regkey+"\\Lockers", "numLock")==null){
+				WinRegistry.writeStringValue(user, regkey+"\\lockers", "numLock", "50");
+			}
+			if(WinRegistry.readString(user, regkey+"\\Lockers", "preferidos")==null){
+				WinRegistry.writeStringValue(user, regkey+"\\lockers", "preferidos", "A:B:C:D:E:F:G:H:I:J:K:L");
 			}
 		} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
 			e.printStackTrace();

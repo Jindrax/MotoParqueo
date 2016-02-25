@@ -90,6 +90,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.ImageIcon;
 import java.awt.SystemColor;
+import javax.swing.border.TitledBorder;
 
 @SuppressWarnings("unused")
 public class InterfazGrafica {
@@ -165,6 +166,8 @@ public class InterfazGrafica {
 	private JTextField txtCarroporHora;
 	private JTextField txtCarroporFraccion;
 	private JTextField txtCarrotFraccion;
+	private JTextField txtConNumLock;
+	private JTextField txtConPref;
 	/**
 	 * Launch the application.
 	 */
@@ -173,8 +176,14 @@ public class InterfazGrafica {
 			public void run() {
 				try {
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-					Config.inicializar();
-					parqueadero = new Parqueadero(Config.getNumeroLockers(), Config.getPreferidos());
+					List<String> preferidos;
+					preferidos = new ArrayList<String>(); 
+					String preferido = WinRegistry.leerConfig("Lockers", "preferidos");
+					String[] preferArray = preferido.split(":");
+					for(int i=0; i<preferArray.length; i++){
+						preferidos.add(preferArray[i]);
+					}
+					parqueadero = new Parqueadero(Integer.parseInt(WinRegistry.leerConfig("Lockers", "numLock")), preferidos);
 					InterfazGrafica window = new InterfazGrafica();
 					window.frmMotoparqueo.setVisible(true);
 				} catch (Exception e) {
@@ -210,9 +219,6 @@ public class InterfazGrafica {
 				Parqueadero cargado = parqueadero.cargar();
 				if(cargado!=null){
 					parqueadero = cargado;
-				}
-				if (parqueadero.getLockers().size()!=Config.getNumeroLockers()) {
-					parqueadero.relistarLockers(Config.getNumeroLockers(), Config.getPreferidos());
 				}
 				actualizarTMotoDiario();
 				actualizarTMensual();
@@ -387,10 +393,15 @@ public class InterfazGrafica {
 		textoPlaca.setFont(new Font("Arial", Font.PLAIN, 20));
 		textoPlaca.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (textoPlaca.getText().length()>=5) {
+				boolean isCarro = textoPlaca.getText().charAt(textoPlaca.getText().length()-1)>47 && textoPlaca.getText().charAt(textoPlaca.getText().length()-1)<58;
+				if (textoPlaca.getText().length()==5) {
 					textoCascos.requestFocus();
 				}else{
-					btnRegistrar.requestFocus();
+					if(!isCarro){
+						textoCascos.requestFocus();
+					}else{
+						btnRegistrar.requestFocus();
+					}
 				}
 			}
 		});
@@ -438,8 +449,9 @@ public class InterfazGrafica {
 		panelAdmin.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
+				String admPass = WinRegistry.leerConfig("", "admPass");
 				try {
-					if (JOptionPane.showInputDialog("Clave: ").equals("8051")) {
+					if (JOptionPane.showInputDialog("Clave: ").equals(admPass)) {
 						getTCierre().setText(String.valueOf(Parqueadero.getHoraCierre()));
 						tCons.setText(String.valueOf(parqueadero.getContabilidad().getConsecutivo()));
 						actualizarTHistorial();
@@ -450,6 +462,8 @@ public class InterfazGrafica {
 						txtCarroporHora.setText(WinRegistry.leerConfig("Carro", "porHora"));
 						txtCarroporFraccion.setText(WinRegistry.leerConfig("Carro", "porFraccion"));
 						txtCarrotFraccion.setText(WinRegistry.leerConfig("Carro", "tiempoFraccion"));
+						txtConNumLock.setText(WinRegistry.leerConfig("Lockers", "numLock"));
+						txtConPref.setText(WinRegistry.leerConfig("Lockers", "preferidos"));
 					}else{
 						tabbedPane.setSelectedIndex(0);
 						JOptionPane.showMessageDialog(null, "Clave Errada.");
@@ -936,6 +950,62 @@ public class InterfazGrafica {
 		btnAdmCerrarDiaEspecial.setBounds(850, 58, 268, 32);
 		tabAdmIngreso.add(btnAdmCerrarDiaEspecial);
 		
+		JPanel panel_5 = new JPanel();
+		panel_5.setBackground(Color.YELLOW);
+		tabbedPane_Adm.addTab("Configuraciones", null, panel_5, null);
+		panel_5.setLayout(null);
+		
+		JPanel panel_6 = new JPanel();
+		panel_6.setBackground(Color.YELLOW);
+		panel_6.setBorder(new TitledBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)), "Lockers", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_6.setBounds(10, 11, 1127, 61);
+		panel_5.add(panel_6);
+		panel_6.setLayout(null);
+		
+		JLabel lblLockers = new JLabel("# lockers");
+		lblLockers.setBounds(10, 27, 44, 14);
+		panel_6.add(lblLockers);
+		
+		txtConNumLock = new JTextField();
+		txtConNumLock.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				WinRegistry.guardarConfig("Lockers", "numLock", txtConNumLock.getText());
+				JOptionPane.showMessageDialog(null, "Valor actualizado.");
+				List<String> preferidos = new ArrayList<String>(); 
+				String preferido = WinRegistry.leerConfig("Lockers", "preferidos");
+				String[] preferArray = preferido.split(":");
+				for(int i=0; i<preferArray.length; i++){
+					preferidos.add(preferArray[i]);
+				}
+				parqueadero.relistarLockers(Integer.parseInt(WinRegistry.leerConfig("Lockers", "numLock")), preferidos);
+			}
+		});
+		txtConNumLock.setBounds(59, 24, 86, 20);
+		panel_6.add(txtConNumLock);
+		txtConNumLock.setColumns(10);
+		
+		JLabel lblPreferidos = new JLabel("Preferidos");
+		lblPreferidos.setBounds(155, 27, 49, 14);
+		panel_6.add(lblPreferidos);
+		
+		txtConPref = new JTextField();
+		txtConPref.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				WinRegistry.guardarConfig("Lockers", "preferidos", txtConPref.getText());
+				JOptionPane.showMessageDialog(null, "Valor actualizado.");
+				List<String> preferidos = new ArrayList<String>(); 
+				String preferido = WinRegistry.leerConfig("Lockers", "preferidos");
+				String[] preferArray = preferido.split(":");
+				for(int i=0; i<preferArray.length; i++){
+					preferidos.add(preferArray[i]);
+				}
+				parqueadero.relistarLockers(Integer.parseInt(WinRegistry.leerConfig("Lockers", "numLock")), preferidos);
+			}
+		});
+		txtConPref.setBounds(209, 24, 908, 20);
+		panel_6.add(txtConPref);
+		txtConPref.setColumns(10);
+		
 		lblTotalCobrado = new JLabel("Total Cobrado:");
 		lblTotalCobrado.setBounds(1181, 334, 198, 30);
 		panelAdmin.add(lblTotalCobrado);
@@ -1327,8 +1397,9 @@ public class InterfazGrafica {
 	}
 
 	protected void cerrarDia() {
+		String admPass = WinRegistry.leerConfig("", "admPass");
 		try {
-			if (JOptionPane.showInputDialog("Ingrese la clave para cerrar.").equals("8051")) {
+			if (JOptionPane.showInputDialog("Ingrese la clave para cerrar.").equals(admPass)) {
 				List<Transferencia> dia = parqueadero.getContabilidad().getDia(Utilidades.formaterFecha(new GregorianCalendar()));
 				TransferenciaDiaria first = (TransferenciaDiaria) dia.get(0);
 				TransferenciaDiaria last = (TransferenciaDiaria) dia.get(dia.size()-1);
@@ -1445,8 +1516,22 @@ public class InterfazGrafica {
 	}
 
 	protected void ingresarVehiculo(String input){
-		char tipo = input.charAt(0);
-		input = input.substring(1, input.length());
+		char tipo = 0;
+		if(input.length()<6){
+			tipo='M';
+		}else{
+			if(input.charAt(input.length()-1)>64 && input.charAt(input.length()-1)<91 && input.length()<=6){
+				tipo='M';
+			}else{
+				if(input.length()==6){
+					tipo='C';
+				}else{
+					int last = input.length()-1;
+					tipo = input.charAt(input.length()-1);
+					input = input.substring(0, last);
+				}
+			}
+		}
 		if (!isBanned(input)) {
 			String placa = input;
 			try {
@@ -1618,5 +1703,8 @@ public class InterfazGrafica {
 	}
 	public JTextField getTxtCarrotFraccion() {
 		return txtCarrotFraccion;
+	}
+	public JTextField getTxtConNumLock() {
+		return txtConNumLock;
 	}
 }
