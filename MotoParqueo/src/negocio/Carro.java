@@ -48,20 +48,24 @@ public class Carro extends CupoDiario {
 
 	@Override
 	public double calcularCobro() {
-		int tiempoFraccion = Integer.parseInt(WinRegistry.leerConfig("Carro", "tiempoFraccion"));
-		long unaHora = Long.parseLong(WinRegistry.leerConfig("Carro", "porHora")),
-		porFraccion = Long.parseLong(WinRegistry.leerConfig("Carro", "porFraccion"));
-
+		this.valorAsignado=0;
+		long porHora = Long.parseLong(WinRegistry.leerConfig("Carro", "porHora")),
+		porFraccion = Long.parseLong(WinRegistry.leerConfig("Carro", "porFraccion")),
+		tiempoFraccion = Long.parseLong(WinRegistry.leerConfig("Carro", "tiempoFraccion"));
+		if(this.lockerAsignado!=null){
+			this.valorAsignado+=300;
+		}
 		this.tiempoTranscurrido = Math.ceil(this.tiempoTranscurrido/60.0);
-		if(this.tiempoTranscurrido>tiempoFraccion){
-			this.valorCobrado=Math.ceil(this.tiempoTranscurrido/60.0)*unaHora;
-			this.valorAsignado=valorCobrado;
-			return this.valorCobrado;
+		int horas = (int) (this.tiempoTranscurrido/60);
+		int minutos = (int) (this.tiempoTranscurrido%60);
+		int fracciones = 0;
+		if(minutos%tiempoFraccion<tiempoFraccion && minutos/tiempoFraccion>0){
+			horas++;
+		}else{
+			fracciones++;
 		}
-		else{
-			this.valorCobrado=porFraccion;
-			this.valorAsignado=valorCobrado;
-			return this.valorCobrado;
-		}
+		this.valorAsignado = (horas * porHora) + (fracciones * porFraccion);
+		this.valorCobrado = this.valorAsignado;
+		return this.valorAsignado;
 	}
 }

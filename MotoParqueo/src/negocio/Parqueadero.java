@@ -16,7 +16,6 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import contabilidad.Contabilidad;
-import contabilidad.tipoTrans;
 import persistencia.BancoDeDatos;
 import presentacion.Utilidades;
 
@@ -484,7 +483,7 @@ public class Parqueadero implements Serializable{
 			cliente.setEntradas(cliente.getEntradas()+1);
 			nuevoCupo.calcularTiempoTrans();
 			nuevoCupo.calcularCobro();
-			contabilidad.ingresoEspecial(fecha, nuevoCupo.getValorCobrado(), tipoTrans.diario,placa);
+			contabilidad.ingreso(fecha, nuevoCupo);
 			nuevoCupo.getCliente().setMinutosReg((long) (nuevoCupo.getCliente().getMinutosReg() + nuevoCupo.getTiempoTranscurrido()));
 			nuevoCupo.getCliente().setCobroTotal((int) (nuevoCupo.getCliente().getCobroTotal() + nuevoCupo.getValorCobrado()));
 			return nuevoCupo;
@@ -496,7 +495,7 @@ public class Parqueadero implements Serializable{
 			dataBank.adjuntarClienteDiario(cliente);
 			nuevoCupo.calcularTiempoTransEspecial();
 			nuevoCupo.calcularCobro();
-			contabilidad.ingresoEspecial(fecha, nuevoCupo.getValorCobrado(), tipoTrans.diario,placa);
+			contabilidad.ingreso(fecha, nuevoCupo);
 			nuevoCupo.getCliente().setMinutosReg((long) (nuevoCupo.getCliente().getMinutosReg() + nuevoCupo.getTiempoTranscurrido()));
 			nuevoCupo.getCliente().setCobroTotal((int) (nuevoCupo.getCliente().getCobroTotal() + nuevoCupo.getValorCobrado()));
 			return nuevoCupo;
@@ -511,7 +510,7 @@ public class Parqueadero implements Serializable{
 			nuevoCupo.calcularTiempoTrans();
 			nuevoCupo.calcularCobro();
 			nuevoCupo.setValorCobrado(valor);
-			contabilidad.ingresoEspecial(fecha, nuevoCupo.getValorCobrado(), tipoTrans.diario,placa);
+			contabilidad.ingreso(fecha, nuevoCupo);
 			nuevoCupo.getCliente().setMinutosReg((long) (nuevoCupo.getCliente().getMinutosReg() + nuevoCupo.getTiempoTranscurrido()));
 			nuevoCupo.getCliente().setCobroTotal((int) (nuevoCupo.getCliente().getCobroTotal() + nuevoCupo.getValorCobrado()));
 			return nuevoCupo;
@@ -524,7 +523,7 @@ public class Parqueadero implements Serializable{
 			nuevoCupo.calcularTiempoTrans();
 			nuevoCupo.calcularCobro();
 			nuevoCupo.setValorCobrado(valor);
-			contabilidad.ingresoEspecial(fecha, nuevoCupo.getValorCobrado(), tipoTrans.diario,placa);
+			contabilidad.ingreso(fecha, nuevoCupo);
 			nuevoCupo.getCliente().setMinutosReg((long) (nuevoCupo.getCliente().getMinutosReg() + nuevoCupo.getTiempoTranscurrido()));
 			nuevoCupo.getCliente().setCobroTotal((int) (nuevoCupo.getCliente().getCobroTotal() + nuevoCupo.getValorCobrado()));
 			return nuevoCupo;

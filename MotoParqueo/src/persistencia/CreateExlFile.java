@@ -15,9 +15,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import contabilidad.Contabilidad;
-import contabilidad.Transferencia;
-import contabilidad.TransferenciaDiaria;
-import contabilidad.TransferenciaMensual;
+import contabilidad.RegistroDiario;
 import negocio.CupoDiario;
 import presentacion.Utilidades;
 
@@ -38,14 +36,12 @@ public class CreateExlFile{
 		styleHeader.setFont(fuenteHeader);
 		Row rowHeader = sheetTest.createRow((short) 0);
 		Cell cell = rowHeader.createCell(0);
-		cell.setCellValue("Consecutivo");
-		cell.setCellStyle(styleHeader);
-		cell = rowHeader.createCell(1);
-		cell.setCellValue("Placa");
-		cell.setCellStyle(styleHeader);
-		cell = rowHeader.createCell(2);
-		cell.setCellValue("Monto");
-		cell.setCellStyle(styleHeader);
+		String[] columnas = {"Consecutivo","Tipo","Placa", "H.Entrada", "H.Salida", "Locker", "Cascos", "Tiempo(m)", "Pagado"};
+		for(int j=0; j<columnas.length;j++){
+			cell = rowHeader.createCell(j);
+			cell.setCellValue(columnas[j]);
+			cell.setCellStyle(styleHeader);
+		}
 		int i=1;
 		Font fuenteBody = wb.createFont();
 		fuenteBody.setBold(false);
@@ -54,81 +50,36 @@ public class CreateExlFile{
 		CellStyle styleCons = wb.createCellStyle();
 		styleCons.setFont(fuenteBody);
 		styleCons.setAlignment(CellStyle.ALIGN_CENTER);
-		CellStyle stylePlaca = wb.createCellStyle();
-		stylePlaca.setFont(fuenteBody);
-		stylePlaca.setAlignment(CellStyle.ALIGN_LEFT);
-		CellStyle styleMonto = wb.createCellStyle();
-		styleMonto.setFont(fuenteBody);
-		styleMonto.setAlignment(CellStyle.ALIGN_RIGHT);
 		long total=0;
-		for (Transferencia next: contabilidad.getDia(hoy)) {
-			TransferenciaDiaria trans = (TransferenciaDiaria) next;
+		for (RegistroDiario next: contabilidad.getDia(hoy)) {
 			Row row = sheetTest.createRow((short) i);
-			cell = row.createCell(0);
-			cell.setCellValue(trans.getConsecutivo());
-			cell.setCellStyle(styleCons);
-			cell = row.createCell(1);
-			cell.setCellValue(trans.getPlaca());
-			cell.setCellStyle(stylePlaca);
-			cell = row.createCell(2);
-			cell.setCellValue(next.getMonto());
-			cell.setCellStyle(styleMonto);
-			total += next.getMonto();
+			String[] locker = Utilidades.lockerToString(next.getCupo().getLockerAsignado());
+			String[] datos = {String.valueOf(next.getConsecutivoAsignado()),next.getCupo().getClass().getSimpleName(),next.getCupo().getCliente().getPlaca(),
+					Utilidades.formaterHora(next.getCupo().getHoraIngreso()), Utilidades.formaterHora(next.getCupo().getHoraSalida()),
+					locker[0], locker[1], String.valueOf(next.getCupo().getTiempoTranscurrido()),String.valueOf(next.getCupo().getValorCobrado())};
+			for(int k=0; k<datos.length; k++){
+				cell = row.createCell(k);
+				cell.setCellValue(datos[k]);
+				cell.setCellStyle(styleCons);
+			}
+			total+=next.getCupo().getValorCobrado();
 			i++;
 		}
 		CellStyle styleFooter = wb.createCellStyle();
 		styleFooter.setFont(fuenteHeader);
-		styleFooter.setFillForegroundColor(IndexedColors.GREEN.getIndex());
+		styleFooter.setFillForegroundColor(IndexedColors.RED.getIndex());
 	    styleFooter.setFillPattern(CellStyle.SOLID_FOREGROUND);
-		Row rowFooter = sheetTest.createRow(i);
-		cell = rowFooter.createCell(0);
-		cell.setCellValue("");
-		cell = rowFooter.createCell(1);
+		Row rowFooter = sheetTest.createRow(i);			//Fila de total
+		cell = rowFooter.createCell(columnas.length-2);
 		cell.setCellValue("Total");
 		cell.setCellStyle(styleFooter);
-		cell = rowFooter.createCell(2);
+		cell = rowFooter.createCell(columnas.length-1);
 		cell.setCellValue(total);
+		cell.setCellType(0);
 		cell.setCellStyle(styleFooter);
-		total=0;
-		i++;		
-		Row rowHeaderMensual = sheetTest.createRow((short) i);
-		cell = rowHeaderMensual.createCell(0);
-		cell.setCellValue("Nombre");
-		cell.setCellStyle(styleHeader);
-		cell = rowHeaderMensual.createCell(1);
-		cell.setCellValue("Placa");
-		cell.setCellStyle(styleHeader);
-		cell = rowHeaderMensual.createCell(2);
-		cell.setCellValue("Monto");
-		cell.setCellStyle(styleHeader);
-		i++;
-		for (Transferencia next: contabilidad.getMensualDia(hoy)) {
-			TransferenciaMensual trans = (TransferenciaMensual) next;
-			Row row = sheetTest.createRow((short) i);
-			cell = row.createCell(0);
-			cell.setCellValue(trans.getNombre());
-			cell.setCellStyle(styleCons);
-			cell = row.createCell(1);
-			cell.setCellValue(trans.getPlaca());
-			cell.setCellStyle(stylePlaca);
-			cell = row.createCell(2);
-			cell.setCellValue(next.getMonto());
-			cell.setCellStyle(styleMonto);
-			total += next.getMonto();
-			i++;
+		for(int k=0; k<columnas.length;k++){
+			sheetTest.autoSizeColumn(k);
 		}
-		Row rowFooterMensual = sheetTest.createRow(i);
-		cell = rowFooterMensual.createCell(0);
-		cell.setCellValue("");
-		cell = rowFooterMensual.createCell(1);
-		cell.setCellValue("Total");
-		cell.setCellStyle(styleFooter);
-		cell = rowFooterMensual.createCell(2);
-		cell.setCellValue(total);
-		cell.setCellStyle(styleFooter);
-		sheetTest.autoSizeColumn(0);
-		sheetTest.autoSizeColumn(1);
-		sheetTest.autoSizeColumn(2);
 	}
 	
 	private static void fillContent(List<CupoDiario> historial, Workbook wb, String hoy){
@@ -153,7 +104,7 @@ public class CreateExlFile{
 		styleCons.setFont(fuenteBody);
 		styleCons.setAlignment(CellStyle.ALIGN_CENTER);
 		Row rowHeader = sheetTest.createRow((short) 0);
-		String[] columnas = {"Placa", "H.Entrada", "H.Salida", "Locker", "Cascos", "Tiempo", "Pagado", "Asignado"};
+		String[] columnas = {"Tipo","Placa", "H.Entrada", "H.Salida", "Locker", "Cascos", "Tiempo(m)", "Pagado", "Asignado"};
 		for(int j=0; j<columnas.length;j++){
 			cell = rowHeader.createCell(j);
 			cell.setCellValue(columnas[j]);
@@ -163,36 +114,39 @@ public class CreateExlFile{
 		for (CupoDiario next: historial) {
 			Row row = sheetTest.createRow((short) i);
 			cell = row.createCell(0);
-			cell.setCellValue(next.getCliente().getPlaca());
+			cell.setCellValue(next.getClass().getSimpleName());
 			cell.setCellStyle(styleCons);
 			cell = row.createCell(1);
-			cell.setCellValue(Utilidades.formaterHora(next.getHoraIngreso()));
+			cell.setCellValue(next.getCliente().getPlaca());
 			cell.setCellStyle(styleCons);
 			cell = row.createCell(2);
+			cell.setCellValue(Utilidades.formaterHora(next.getHoraIngreso()));
+			cell.setCellStyle(styleCons);
+			cell = row.createCell(3);
 			cell.setCellValue(Utilidades.formaterHora(next.getHoraSalida()));
 			cell.setCellStyle(styleCons);
 			if (next.getLockerAsignado()!=null) {
-				cell = row.createCell(3);
+				cell = row.createCell(4);
 				cell.setCellValue(next.getLockerAsignado().getIdentificador());
 				cell.setCellStyle(styleCons);
-				cell = row.createCell(4);
+				cell = row.createCell(5);
 				cell.setCellValue(next.getLockerAsignado().getCantidad());
 				cell.setCellStyle(styleCons);
 			}else{
-				cell = row.createCell(3);
+				cell = row.createCell(4);
 				cell.setCellValue("Ninguno");
 				cell.setCellStyle(styleCons);
-				cell = row.createCell(4);
+				cell = row.createCell(5);
 				cell.setCellValue(0);
 				cell.setCellStyle(styleCons);
 			}
-			cell = row.createCell(5);
+			cell = row.createCell(6);
 			cell.setCellValue(next.getTiempoTranscurrido());
 			cell.setCellStyle(styleCons);
-			cell = row.createCell(6);
+			cell = row.createCell(7);
 			cell.setCellValue(next.getValorCobrado());
 			cell.setCellStyle(styleCons);
-			cell = row.createCell(7);
+			cell = row.createCell(8);
 			cell.setCellValue(next.getValorAsignado());
 			cell.setCellStyle(styleCons);
 			i++;
@@ -218,7 +172,7 @@ public class CreateExlFile{
 	}
 	
 	public static void guardarContabilidad(Contabilidad contabilidad, String hoy){
-		String folder = System.getProperty("user.home")+"\\Documents\\Contabilidad-MotoParqueo";
+		String folder = System.getProperty("user.home")+"\\Documents\\Contabilidad-MotoParqueo\\Diario";
 		createFolder(folder);
 		String[] fecha = hoy.split("/");
 		try {
@@ -246,7 +200,7 @@ public class CreateExlFile{
 		}
 	}
 	public static void guardarHistorialDia(List<CupoDiario> historial, String hoy){
-		String folder = System.getProperty("user.home")+"\\AppData\\Local\\MotoParqueo\\Historial";
+		String folder = System.getProperty("user.home")+"\\AppData\\Local\\MotoParqueo\\HistorialDiario";
 		createFolder(folder);
 		String[] fecha = hoy.split("/");
 		try {

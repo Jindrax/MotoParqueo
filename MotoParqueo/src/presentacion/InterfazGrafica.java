@@ -45,9 +45,7 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import contabilidad.Contabilidad;
-import contabilidad.Transferencia;
-import contabilidad.TransferenciaDiaria;
-import contabilidad.tipoTrans;
+import contabilidad.RegistroDiario;
 import javafx.scene.chart.PieChart.Data;
 import javafx.scene.input.KeyCode;
 import persistencia.WinRegistry;
@@ -235,8 +233,8 @@ public class InterfazGrafica {
 				}
 			}
 		});
-		frmMotoparqueo.setIconImage(Toolkit.getDefaultToolkit().getImage(InterfazGrafica.class.getResource("/recursos/IcoMotoParqueo.png")));
-		frmMotoparqueo.setTitle("MotoParqueo259");
+		frmMotoparqueo.setIconImage(Toolkit.getDefaultToolkit().getImage(InterfazGrafica.class.getResource("/recursos/Icono Parqueadero 32.jpg")));
+		frmMotoparqueo.setTitle("OPYTRANS LTDA.");
 		frmMotoparqueo.setResizable(false);
 		frmMotoparqueo.setBounds(10, 10, 1420, 843);
 		frmMotoparqueo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -262,7 +260,7 @@ public class InterfazGrafica {
 		tableMotosDiario.setFont(new Font("Arial", Font.PLAIN, 20));
 		JPanel panelDiario = new JPanel();
 		panelDiario.setBorder(null);
-		panelDiario.setBackground(Color.YELLOW);
+		panelDiario.setBackground(Color.RED);
 		panelDiario.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
@@ -293,6 +291,7 @@ public class InterfazGrafica {
 		panelDiario.add(btnRegistrar);
 		
 		JLabel lblValor = new JLabel("Valor");
+		lblValor.setForeground(Color.WHITE);
 		lblValor.setFont(new Font("Arial", Font.PLAIN, 40));
 		lblValor.setBounds(1035, 231, 92, 47);
 		panelDiario.add(lblValor);
@@ -317,6 +316,7 @@ public class InterfazGrafica {
 		textoValor.setColumns(10);
 		
 		eTiempo = new JLabel("Tiempo transcurrido");
+		eTiempo.setForeground(Color.WHITE);
 		eTiempo.setFont(new Font("Arial", Font.PLAIN, 20));
 		eTiempo.setHorizontalAlignment(SwingConstants.RIGHT);
 		eTiempo.setBounds(1035, 292, 344, 24);
@@ -410,12 +410,13 @@ public class InterfazGrafica {
 		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-		panel_3.setBackground(Color.YELLOW);
+		panel_3.setBackground(Color.RED);
 		panel_3.setBounds(1035, 46, 344, 30);
 		panelDiario.add(panel_3);
 		panel_3.setLayout(null);
 		
 		JLabel lblCascos = new JLabel("Cascos:");
+		lblCascos.setForeground(Color.WHITE);
 		lblCascos.setBounds(3, 3, 87, 24);
 		panel_3.add(lblCascos);
 		lblCascos.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -441,11 +442,11 @@ public class InterfazGrafica {
 		
 		JLabel label = new JLabel("");
 		label.setIcon(new ImageIcon(InterfazGrafica.class.getResource("/recursos/Logo parqueadero.jpg")));
-		label.setBounds(1050, 460, 314, 229);
+		label.setBounds(1050, 628, 314, 121);
 		panelDiario.add(label);
 		
 		JPanel panelAdmin = new JPanel();
-		panelAdmin.setBackground(Color.YELLOW);
+		panelAdmin.setBackground(Color.RED);
 		panelAdmin.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
@@ -453,12 +454,13 @@ public class InterfazGrafica {
 				try {
 					if (JOptionPane.showInputDialog("Clave: ").equals(admPass)) {
 						getTCierre().setText(String.valueOf(Parqueadero.getHoraCierre()));
-						tCons.setText(String.valueOf(parqueadero.getContabilidad().getConsecutivo()));
+						//tCons.setText(String.valueOf(parqueadero.getContabilidad().getConsecutivo())); deprecated
+						tCons.setText(WinRegistry.leerConfig("Contabilidad", "consecutivo"));
 						actualizarTHistorial();
 						eTotalCobrado.setText(String.valueOf(parqueadero.getContabilidad().getCajaActual()));
-						txtAdmMH.setText(WinRegistry.leerConfig("Moto", "mediaHora"));
-						txtAdmUH.setText(WinRegistry.leerConfig("Moto", "unaHora"));
-						txtAdmPH.setText(WinRegistry.leerConfig("Moto", "porHora"));
+						txtAdmMH.setText(WinRegistry.leerConfig("Moto", "porHora"));
+						txtAdmUH.setText(WinRegistry.leerConfig("Moto", "porFraccion"));
+						txtAdmPH.setText(WinRegistry.leerConfig("Moto", "tiempoFraccion"));
 						txtCarroporHora.setText(WinRegistry.leerConfig("Carro", "porHora"));
 						txtCarroporFraccion.setText(WinRegistry.leerConfig("Carro", "porFraccion"));
 						txtCarrotFraccion.setText(WinRegistry.leerConfig("Carro", "tiempoFraccion"));
@@ -475,7 +477,7 @@ public class InterfazGrafica {
 			}
 		});		
 		JPanel panelMensual = new JPanel();
-		panelMensual.setBackground(Color.YELLOW);
+		panelMensual.setBackground(Color.RED);
 		panelMensual.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
@@ -500,6 +502,7 @@ public class InterfazGrafica {
 		scrollMensual.setViewportView(tMensual);
 		
 		lblMenNombre = new JLabel("Nombre");
+		lblMenNombre.setForeground(Color.WHITE);
 		lblMenNombre.setFont(new Font("Arial", Font.PLAIN, 20));
 		lblMenNombre.setBounds(1122, 14, 81, 24);
 		panelMensual.add(lblMenNombre);
@@ -517,21 +520,25 @@ public class InterfazGrafica {
 		panelMensual.add(txtMenNombre);
 		
 		lblMenCedula = new JLabel("Cedula");
+		lblMenCedula.setForeground(Color.WHITE);
 		lblMenCedula.setFont(new Font("Arial", Font.PLAIN, 20));
 		lblMenCedula.setBounds(1122, 57, 81, 24);
 		panelMensual.add(lblMenCedula);
 		
 		lblMenCelular = new JLabel("Celular");
+		lblMenCelular.setForeground(Color.WHITE);
 		lblMenCelular.setFont(new Font("Arial", Font.PLAIN, 20));
 		lblMenCelular.setBounds(1122, 98, 81, 24);
 		panelMensual.add(lblMenCelular);
 		
 		lblMenPlaca = new JLabel("Placa");
+		lblMenPlaca.setForeground(Color.WHITE);
 		lblMenPlaca.setFont(new Font("Arial", Font.PLAIN, 20));
 		lblMenPlaca.setBounds(1122, 139, 81, 24);
 		panelMensual.add(lblMenPlaca);
 		
 		lblMenIngreso = new JLabel("Ingreso");
+		lblMenIngreso.setForeground(Color.WHITE);
 		lblMenIngreso.setFont(new Font("Arial", Font.PLAIN, 20));
 		lblMenIngreso.setBounds(1122, 180, 81, 24);
 		panelMensual.add(lblMenIngreso);
@@ -607,6 +614,7 @@ public class InterfazGrafica {
 		panelMensual.add(txtMenPlacaPago);
 		
 		lblMenPlacaPago = new JLabel("Placa");
+		lblMenPlacaPago.setForeground(Color.WHITE);
 		lblMenPlacaPago.setFont(new Font("Arial", Font.PLAIN, 20));
 		lblMenPlacaPago.setBounds(1122, 314, 81, 24);
 		panelMensual.add(lblMenPlacaPago);
@@ -622,18 +630,19 @@ public class InterfazGrafica {
 		panelMensual.add(btnPagoMensual);
 		
 		JSeparator separator_1 = new JSeparator();
-		separator_1.setBackground(Color.BLACK);
-		separator_1.setForeground(Color.BLACK);
+		separator_1.setBackground(Color.WHITE);
+		separator_1.setForeground(Color.WHITE);
 		separator_1.setBounds(1122, 286, 257, 14);
 		panelMensual.add(separator_1);
 		
 		JSeparator separator_2 = new JSeparator();
-		separator_2.setForeground(Color.BLACK);
-		separator_2.setBackground(Color.BLACK);
+		separator_2.setForeground(Color.WHITE);
+		separator_2.setBackground(Color.WHITE);
 		separator_2.setBounds(1122, 413, 257, 14);
 		panelMensual.add(separator_2);
 		
 		JLabel lblMenPlacaRetirar = new JLabel("Placa");
+		lblMenPlacaRetirar.setForeground(Color.WHITE);
 		lblMenPlacaRetirar.setFont(new Font("Arial", Font.PLAIN, 20));
 		lblMenPlacaRetirar.setBounds(1122, 435, 81, 24);
 		panelMensual.add(lblMenPlacaRetirar);
@@ -661,6 +670,7 @@ public class InterfazGrafica {
 		panelMensual.add(btnMenRetirar);
 		
 		JLabel lblMenMen = new JLabel("Mensualidad");
+		lblMenMen.setForeground(Color.WHITE);
 		lblMenMen.setFont(new Font("Arial", Font.PLAIN, 20));
 		lblMenMen.setBounds(1122, 722, 123, 24);
 		panelMensual.add(lblMenMen);
@@ -680,14 +690,15 @@ public class InterfazGrafica {
 		panelMensual.add(txtMenMensualidad);
 		
 		JSeparator separator_3 = new JSeparator();
-		separator_3.setForeground(Color.BLACK);
-		separator_3.setBackground(Color.BLACK);
+		separator_3.setForeground(Color.WHITE);
+		separator_3.setBackground(Color.WHITE);
 		separator_3.setBounds(1122, 703, 257, 14);
 		panelMensual.add(separator_3);
 		tabbedPane.addTab("Administracion", null, panelAdmin, null);
 		panelAdmin.setLayout(null);
 		
 		JLabel lblHoraDeCierre = new JLabel("H. Cierre");
+		lblHoraDeCierre.setForeground(Color.WHITE);
 		lblHoraDeCierre.setFont(new Font("Arial", Font.PLAIN, 20));
 		lblHoraDeCierre.setBounds(1172, 545, 87, 24);
 		panelAdmin.add(lblHoraDeCierre);
@@ -723,7 +734,7 @@ public class InterfazGrafica {
 		tCons.setFont(new Font("Arial", Font.PLAIN, 20));
 		tCons.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				parqueadero.getContabilidad().setConsecutivo(Long.parseLong(tCons.getText().trim()));
+				WinRegistry.guardarConfig("Contabilidad", "consecutivo", tCons.getText().trim());
 				JOptionPane.showMessageDialog(null, "Se ha registrado el consecutivo correctamente.");
 				parqueadero.guardar();
 			}
@@ -734,11 +745,13 @@ public class InterfazGrafica {
 		tCons.setColumns(10);
 		
 		lblConsecutivo = new JLabel("Cons");
+		lblConsecutivo.setForeground(Color.WHITE);
 		lblConsecutivo.setFont(new Font("Arial", Font.PLAIN, 20));
 		lblConsecutivo.setBounds(1172, 583, 106, 24);
 		panelAdmin.add(lblConsecutivo);
 		
 		JLabel lblBan = new JLabel("Ban");
+		lblBan.setForeground(Color.WHITE);
 		lblBan.setFont(new Font("Arial", Font.PLAIN, 20));
 		lblBan.setBounds(1172, 469, 67, 24);
 		panelAdmin.add(lblBan);
@@ -759,6 +772,7 @@ public class InterfazGrafica {
 		panelAdmin.add(txtBan);
 		
 		JLabel lblUnBan = new JLabel("Unban");
+		lblUnBan.setForeground(Color.WHITE);
 		lblUnBan.setFont(new Font("Arial", Font.PLAIN, 20));
 		lblUnBan.setBounds(1172, 507, 67, 24);
 		panelAdmin.add(lblUnBan);
@@ -799,11 +813,12 @@ public class InterfazGrafica {
 		panelAdmin.add(tabbedPane_Adm);
 		
 		tabAdmHDiario = new JPanel();
-		tabAdmHDiario.setBackground(Color.YELLOW);
+		tabAdmHDiario.setBackground(Color.RED);
 		tabbedPane_Adm.addTab("Historial Diario", null, tabAdmHDiario, null);
 		tabAdmHDiario.setLayout(null);
 		
 		JLabel lblHistorialDiario = new JLabel("Historial Diario");
+		lblHistorialDiario.setForeground(Color.WHITE);
 		lblHistorialDiario.setBounds(10, 11, 127, 24);
 		tabAdmHDiario.add(lblHistorialDiario);
 		lblHistorialDiario.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -838,7 +853,7 @@ public class InterfazGrafica {
 		
 		JPanel tabAdmIngreso = new JPanel();
 		tabAdmIngreso.setBorder(null);
-		tabAdmIngreso.setBackground(Color.YELLOW);
+		tabAdmIngreso.setBackground(Color.RED);
 		tabbedPane_Adm.addTab("Ingreso especial", null, tabAdmIngreso, null);
 		tabbedPane_Adm.setBackgroundAt(1, Color.YELLOW);
 		tabAdmIngreso.setLayout(null);
@@ -856,11 +871,13 @@ public class InterfazGrafica {
 		tabAdmIngreso.add(txtAdmFecha);
 		
 		JLabel lblFecha = new JLabel("Fecha:");
+		lblFecha.setForeground(Color.WHITE);
 		lblFecha.setFont(new Font("Arial", Font.PLAIN, 20));
 		lblFecha.setBounds(10, 11, 69, 24);
 		tabAdmIngreso.add(lblFecha);
 		
 		JLabel lblPlaca_2 = new JLabel("Placa:");
+		lblPlaca_2.setForeground(Color.WHITE);
 		lblPlaca_2.setFont(new Font("Arial", Font.PLAIN, 20));
 		lblPlaca_2.setBounds(10, 62, 69, 24);
 		tabAdmIngreso.add(lblPlaca_2);
@@ -878,6 +895,7 @@ public class InterfazGrafica {
 		tabAdmIngreso.add(txtAdmPlaca);
 		
 		JLabel lblHoraIngreso = new JLabel("Hora Ingreso:");
+		lblHoraIngreso.setForeground(Color.WHITE);
 		lblHoraIngreso.setFont(new Font("Arial", Font.PLAIN, 20));
 		lblHoraIngreso.setBounds(240, 11, 133, 24);
 		tabAdmIngreso.add(lblHoraIngreso);
@@ -895,6 +913,7 @@ public class InterfazGrafica {
 		tabAdmIngreso.add(txtAdmIngreso);
 		
 		JLabel lblHoraSalida = new JLabel("Hora Salida:");
+		lblHoraSalida.setForeground(Color.WHITE);
 		lblHoraSalida.setFont(new Font("Arial", Font.PLAIN, 20));
 		lblHoraSalida.setBounds(240, 62, 133, 24);
 		tabAdmIngreso.add(lblHoraSalida);
@@ -926,6 +945,7 @@ public class InterfazGrafica {
 		tabAdmIngreso.add(txtAdmVC);
 		
 		JLabel lblValorCobrado = new JLabel("Valor Cobrado:");
+		lblValorCobrado.setForeground(Color.WHITE);
 		lblValorCobrado.setFont(new Font("Arial", Font.PLAIN, 20));
 		lblValorCobrado.setBounds(518, 11, 143, 24);
 		tabAdmIngreso.add(lblValorCobrado);
@@ -951,18 +971,20 @@ public class InterfazGrafica {
 		tabAdmIngreso.add(btnAdmCerrarDiaEspecial);
 		
 		JPanel panel_5 = new JPanel();
-		panel_5.setBackground(Color.YELLOW);
+		panel_5.setBackground(Color.RED);
 		tabbedPane_Adm.addTab("Configuraciones", null, panel_5, null);
 		panel_5.setLayout(null);
 		
 		JPanel panel_6 = new JPanel();
-		panel_6.setBackground(Color.YELLOW);
-		panel_6.setBorder(new TitledBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)), "Lockers", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_6.setForeground(Color.BLACK);
+		panel_6.setBackground(Color.RED);
+		panel_6.setBorder(new TitledBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)), "Lockers", TitledBorder.LEADING, TitledBorder.TOP, null, Color.WHITE));
 		panel_6.setBounds(10, 11, 1127, 61);
 		panel_5.add(panel_6);
 		panel_6.setLayout(null);
 		
 		JLabel lblLockers = new JLabel("# lockers");
+		lblLockers.setForeground(Color.WHITE);
 		lblLockers.setBounds(10, 27, 44, 14);
 		panel_6.add(lblLockers);
 		
@@ -985,6 +1007,7 @@ public class InterfazGrafica {
 		txtConNumLock.setColumns(10);
 		
 		JLabel lblPreferidos = new JLabel("Preferidos");
+		lblPreferidos.setForeground(Color.WHITE);
 		lblPreferidos.setBounds(155, 27, 49, 14);
 		panel_6.add(lblPreferidos);
 		
@@ -1007,6 +1030,7 @@ public class InterfazGrafica {
 		txtConPref.setColumns(10);
 		
 		lblTotalCobrado = new JLabel("Total Cobrado:");
+		lblTotalCobrado.setForeground(Color.WHITE);
 		lblTotalCobrado.setBounds(1181, 334, 198, 30);
 		panelAdmin.add(lblTotalCobrado);
 		lblTotalCobrado.setFont(new Font("Arial", Font.PLAIN, 26));
@@ -1015,7 +1039,7 @@ public class InterfazGrafica {
 		eTotalCobrado.setBounds(1181, 375, 192, 30);
 		panelAdmin.add(eTotalCobrado);
 		eTotalCobrado.setBackground(Color.WHITE);
-		eTotalCobrado.setForeground(Color.BLACK);
+		eTotalCobrado.setForeground(Color.WHITE);
 		eTotalCobrado.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentShown(ComponentEvent e) {
@@ -1036,17 +1060,18 @@ public class InterfazGrafica {
 		
 		JPanel panel = new JPanel();
 		tabbedPane_1.addTab("Motos", null, panel, null);
-		panel.setBackground(Color.YELLOW);
+		panel.setBackground(Color.RED);
 		panel.setBorder(null);
 		
-		JLabel lblAdmMedHora = new JLabel("Media Hora:");
+		JLabel lblAdmMedHora = new JLabel("Por Hora:");
+		lblAdmMedHora.setForeground(Color.WHITE);
 		lblAdmMedHora.setBounds(12, 13, 176, 24);
 		lblAdmMedHora.setFont(new Font("Arial", Font.PLAIN, 20));
 		
 		txtAdmMH = new JTextField();
 		txtAdmMH.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				WinRegistry.guardarConfig("Moto", "mediaHora", txtAdmMH.getText());
+				WinRegistry.guardarConfig("Moto", "porHora", txtAdmMH.getText());
 				JOptionPane.showMessageDialog(null, "Valor actualizado.");
 			}
 		});
@@ -1062,7 +1087,8 @@ public class InterfazGrafica {
 		txtAdmMH.setColumns(10);
 		lblAdmMedHora.setLabelFor(txtAdmMH);
 		
-		JLabel lblAdmUH = new JLabel("Una Hora:");
+		JLabel lblAdmUH = new JLabel("Fraccion:");
+		lblAdmUH.setForeground(Color.WHITE);
 		lblAdmUH.setBounds(12, 93, 176, 24);
 		lblAdmUH.setFont(new Font("Arial", Font.PLAIN, 20));
 		
@@ -1075,7 +1101,7 @@ public class InterfazGrafica {
 		});
 		txtAdmUH.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				WinRegistry.guardarConfig("Moto", "unaHora", txtAdmUH.getText());
+				WinRegistry.guardarConfig("Moto", "porFraccion", txtAdmUH.getText());
 				JOptionPane.showMessageDialog(null, "Valor actualizado.");
 			}
 		});
@@ -1084,7 +1110,8 @@ public class InterfazGrafica {
 		txtAdmUH.setFont(new Font("Arial", Font.PLAIN, 20));
 		txtAdmUH.setColumns(10);
 		
-		JLabel lblAdmPH = new JLabel("Por Hora:");
+		JLabel lblAdmPH = new JLabel("t Fraccion(m):");
+		lblAdmPH.setForeground(Color.WHITE);
 		lblAdmPH.setBounds(12, 173, 176, 24);
 		lblAdmPH.setFont(new Font("Arial", Font.PLAIN, 20));
 		
@@ -1097,7 +1124,7 @@ public class InterfazGrafica {
 		});
 		txtAdmPH.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				WinRegistry.guardarConfig("Moto", "porHora", txtAdmPH.getText());
+				WinRegistry.guardarConfig("Moto", "tiempoFraccion", txtAdmPH.getText());
 				JOptionPane.showMessageDialog(null, "Valor actualizado.");
 			}
 		});
@@ -1114,12 +1141,13 @@ public class InterfazGrafica {
 		panel.add(txtAdmPH);
 		
 		JPanel panel_4 = new JPanel();
-		panel_4.setBackground(Color.YELLOW);
+		panel_4.setBackground(Color.RED);
 		tabbedPane_1.addTab("Carros", null, panel_4, null);
 		tabbedPane_1.setBackgroundAt(1, Color.YELLOW);
 		panel_4.setLayout(null);
 		
 		JLabel lblPorHora = new JLabel("Por Hora:");
+		lblPorHora.setForeground(Color.WHITE);
 		lblPorHora.setFont(new Font("Arial", Font.PLAIN, 20));
 		lblPorHora.setBounds(12, 13, 176, 24);
 		panel_4.add(lblPorHora);
@@ -1138,6 +1166,7 @@ public class InterfazGrafica {
 		panel_4.add(txtCarroporHora);
 		
 		JLabel lblFraccion = new JLabel("Fraccion:");
+		lblFraccion.setForeground(Color.WHITE);
 		lblFraccion.setFont(new Font("Arial", Font.PLAIN, 20));
 		lblFraccion.setBounds(12, 93, 176, 24);
 		panel_4.add(lblFraccion);
@@ -1168,7 +1197,8 @@ public class InterfazGrafica {
 		txtCarrotFraccion.setBounds(12, 211, 176, 30);
 		panel_4.add(txtCarrotFraccion);
 		
-		JLabel lblTiempoFraccionm = new JLabel("t Fraccion (m):");
+		JLabel lblTiempoFraccionm = new JLabel("t Fraccion(m):");
+		lblTiempoFraccionm.setForeground(Color.WHITE);
 		lblTiempoFraccionm.setFont(new Font("Arial", Font.PLAIN, 20));
 		lblTiempoFraccionm.setBounds(12, 174, 176, 24);
 		panel_4.add(lblTiempoFraccionm);
@@ -1272,14 +1302,14 @@ public class InterfazGrafica {
 		String fechaStr = txtAdmFecha.getText().trim();
 		try {
 			if (JOptionPane.showInputDialog("Ingrese la clave para cerrar.").equals("8051")) {
-				List<Transferencia> dia = parqueadero.getContabilidad().getDia(fechaStr);
-				TransferenciaDiaria first = (TransferenciaDiaria) dia.get(0);
-				TransferenciaDiaria last = (TransferenciaDiaria) dia.get(dia.size()-1);
+				List<RegistroDiario> dia = parqueadero.getContabilidad().getDia(fechaStr);
+				RegistroDiario first = dia.get(0);
+				RegistroDiario last =  dia.get(dia.size()-1);
 				double totalDia = 0;
-				for(Transferencia next: dia){
-					totalDia += next.getMonto();
+				for(RegistroDiario next: dia){
+					totalDia += next.getCupo().getValorCobrado();
 				}
-				PrintNow.printResumenDia(String.valueOf(first.getConsecutivo()), String.valueOf(last.getConsecutivo()), String.valueOf(totalDia));
+				PrintNow.printResumenDia(String.valueOf(first.getConsecutivoAsignado()), String.valueOf(last.getConsecutivoAsignado()), String.valueOf(totalDia));
 				CreateExlFile.guardarContabilidad(parqueadero.getContabilidad(),fechaStr);
 				eTotalCobrado.setText(String.valueOf(parqueadero.getContabilidad().getCajaActual()));
 				JOptionPane.showMessageDialog(null,
@@ -1320,16 +1350,16 @@ public class InterfazGrafica {
 	}
 
 	protected void pagarMensual() {
-		CupoMensual cupoAnt = parqueadero.buscarCupoMensual(txtMenPlacaPago.getText().trim().toUpperCase());
+		/*CupoMensual cupoAnt = parqueadero.buscarCupoMensual(txtMenPlacaPago.getText().trim().toUpperCase());
 		GregorianCalendar fechaAnt = (GregorianCalendar) cupoAnt.getFechaSiguienteCobro().clone();
 		CupoMensual cupo = parqueadero.pagoMensual(txtMenPlacaPago.getText().trim().toUpperCase());
-		parqueadero.getContabilidad().ingreso(new GregorianCalendar(),parqueadero.getMensualidad(), tipoTrans.mensual, cupo.getCliente().getPlaca(), cupo.getCliente().getNombre());
+		parqueadero.getContabilidad().ingreso(new GregorianCalendar(),cupo);
 		actualizarTMensual();
 		txtMenPlacaPago.setText("");
 		PrintNow.printReciboMensual(fechaAnt, cupo, parqueadero.getMensualidad());
 		JOptionPane.showMessageDialog(null, "Se ha ingresado el pago correctamente.");
 		txtMenPlacaPago.requestFocus();
-		parqueadero.guardar();
+		parqueadero.guardar();*/		//deprecated
 	}
 
 	 protected void ingresarMensual() {
@@ -1400,10 +1430,10 @@ public class InterfazGrafica {
 		String admPass = WinRegistry.leerConfig("", "admPass");
 		try {
 			if (JOptionPane.showInputDialog("Ingrese la clave para cerrar.").equals(admPass)) {
-				List<Transferencia> dia = parqueadero.getContabilidad().getDia(Utilidades.formaterFecha(new GregorianCalendar()));
-				TransferenciaDiaria first = (TransferenciaDiaria) dia.get(0);
-				TransferenciaDiaria last = (TransferenciaDiaria) dia.get(dia.size()-1);
-				PrintNow.printResumenDia(String.valueOf(first.getConsecutivo()), String.valueOf(last.getConsecutivo()), String.valueOf(parqueadero.getContabilidad().getCajaActual()));
+				List<RegistroDiario> dia = parqueadero.getContabilidad().getDia(Utilidades.formaterFecha(new GregorianCalendar()));
+				RegistroDiario first = dia.get(0);
+				RegistroDiario last = dia.get(dia.size()-1);
+				PrintNow.printResumenDia(String.valueOf(first.getConsecutivoAsignado()), String.valueOf(last.getConsecutivoAsignado()), String.valueOf(parqueadero.getContabilidad().getCajaActual()));
 				CreateExlFile.guardarContabilidad(parqueadero.getContabilidad(), Utilidades.formaterFecha(new GregorianCalendar()));
 				CreateExlFile.guardarHistorialDia(parqueadero.getDataBank().getHistorialDiario(), Utilidades.formaterFecha(new GregorianCalendar()));
 				CupoDiario.setId(0);
@@ -1430,7 +1460,7 @@ public class InterfazGrafica {
 						.get(parqueadero.getDataBank().getHistorialDiario().size() - 1);
 				if (valor!=0) {				
 					cupo.setValorCobrado(Double.parseDouble(textoValor.getText()));
-					parqueadero.getContabilidad().ingreso(new GregorianCalendar(),valor, tipoTrans.diario,cupo.getCliente().getPlaca());
+					parqueadero.getContabilidad().ingreso(new GregorianCalendar(),cupo); //Ingreso al sistema de contabilidad
 					cupo.getCliente()
 							.setMinutosReg((long) (cupo.getCliente().getMinutosReg() + cupo.getTiempoTranscurrido()));
 					cupo.getCliente().setCobroTotal((int) (cupo.getCliente().getCobroTotal() + valor));
@@ -1466,7 +1496,7 @@ public class InterfazGrafica {
 			int valor = (int) Double.parseDouble(textoValor.getText().trim());
 			CupoDiario cupo = parqueadero.getDataBank().getHistorialDiario().get(parqueadero.getDataBank().getHistorialDiario().size()-1);
 			cupo.setValorCobrado(Double.parseDouble(textoValor.getText()));
-			parqueadero.getContabilidad().ingreso(new GregorianCalendar(),valor, tipoTrans.diario,cupo.getCliente().getPlaca());
+			parqueadero.getContabilidad().ingreso(new GregorianCalendar(),cupo);
 			cupo.getCliente().setMinutosReg((long) (cupo.getCliente().getMinutosReg() + cupo.getTiempoTranscurrido()));
 			cupo.getCliente().setCobroTotal((int) (cupo.getCliente().getCobroTotal() + valor));
 			PrintNow.imprimirReciboSalida(cupo);
@@ -1539,7 +1569,8 @@ public class InterfazGrafica {
 				if (!placa.equals("")) {
 					CupoDiario cupo = parqueadero.ingresarDiario(placa, cascos, tipo);
 					if (cupo!=null) {
-						PrintNow.imprimirReciboEntrada(cupo);
+						//TODO: Reactivar el servicio de impresion
+						//PrintNow.imprimirReciboEntrada(cupo);									
 						actualizarTMotoDiario();
 					}else{
 						JOptionPane.showMessageDialog(null, "Tipo de vehiculo no reconocido.");

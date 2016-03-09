@@ -3,6 +3,8 @@ package presentacion;
 import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
+import negocio.Locker;
+
 public class Utilidades {
 
 	public static String formaterHora(GregorianCalendar cal){
@@ -93,5 +95,17 @@ public class Utilidades {
 		retorno.set(GregorianCalendar.SECOND, 0);
 		retorno.getTimeInMillis();
 		return retorno;
+	}
+	public static String[] lockerToString(Locker lock){
+		String[] retorno = {"",""};
+		if(lock==null){
+			retorno[0] = "Ninguno";
+			retorno[1] = "-";
+			return retorno;
+		}else{
+			retorno[0] = lock.getIdentificador();
+			retorno[1] = String.valueOf(lock.getCantidad());
+			return retorno;
+		}
 	}
 }

@@ -390,6 +390,7 @@ public class WinRegistry {
   }
   public static void inicializarConfig(){
 		try {
+			//Creacion de llaves en el registro
 			if(WinRegistry.readStringSubKeys(user, regkey)==null){
 				WinRegistry.createKey(user, regkey);
 			}
@@ -402,23 +403,24 @@ public class WinRegistry {
 			if(WinRegistry.readStringSubKeys(user, regkey+"\\Lockers")==null){
 				WinRegistry.createKey(user, regkey+"\\Lockers");
 			}
-			if(WinRegistry.readString(user, regkey+"\\Moto", "mediaHora")==null){
-				WinRegistry.writeStringValue(user, regkey+"\\Moto", "mediaHora", "600");
+			if(WinRegistry.readStringSubKeys(user, regkey+"\\Contabilidad")==null){
+				WinRegistry.createKey(user, regkey+"\\Contabilidad");
 			}
-			if(WinRegistry.readString(user, regkey+"\\Moto", "unaHora")==null){
-				WinRegistry.writeStringValue(user, regkey+"\\Moto", "unaHora", "900");
+			//Creacion e inicializacion de registros
+			if(WinRegistry.readString(user, regkey+"\\Moto", "porFraccion")==null){
+				WinRegistry.writeStringValue(user, regkey+"\\Moto", "porFraccion", "600");
 			}
 			if(WinRegistry.readString(user, regkey+"\\Moto", "porHora")==null){
-				WinRegistry.writeStringValue(user, regkey+"\\Moto", "porHora", "700");
+				WinRegistry.writeStringValue(user, regkey+"\\Moto", "porHora", "800");
 			}
-			if(WinRegistry.readString(user, regkey+"\\Moto", "porDia")==null){
-				WinRegistry.writeStringValue(user, regkey+"\\Moto", "porDia", "4000");
+			if(WinRegistry.readString(user, regkey+"\\Moto", "tiempoFraccion")==null){
+				WinRegistry.writeStringValue(user, regkey+"\\Moto", "tiempoFraccion", "30");
 			}
 			if(WinRegistry.readString(user, regkey+"\\Carro", "porHora")==null){
-				WinRegistry.writeStringValue(user, regkey+"\\Carro", "porHora", "2000");
+				WinRegistry.writeStringValue(user, regkey+"\\Carro", "porHora", "1500");
 			}
 			if(WinRegistry.readString(user, regkey+"\\Carro", "porFraccion")==null){
-				WinRegistry.writeStringValue(user, regkey+"\\Carro", "porFraccion", "0");
+				WinRegistry.writeStringValue(user, regkey+"\\Carro", "porFraccion", "1000");
 			}
 			if(WinRegistry.readString(user, regkey+"\\Carro", "tiempoFraccion")==null){
 				WinRegistry.writeStringValue(user, regkey+"\\Carro", "tiempoFraccion", "30");
@@ -431,6 +433,9 @@ public class WinRegistry {
 			}
 			if(WinRegistry.readString(user, regkey+"\\Lockers", "preferidos")==null){
 				WinRegistry.writeStringValue(user, regkey+"\\lockers", "preferidos", "A:B:C:D:E:F:G:H:I:J:K:L");
+			}
+			if(WinRegistry.readString(user, regkey+"\\Contabilidad", "consecutivo")==null){
+				WinRegistry.writeStringValue(user, regkey+"\\Contabilidad", "consecutivo", "0");
 			}
 		} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
 			e.printStackTrace();

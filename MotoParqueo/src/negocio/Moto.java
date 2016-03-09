@@ -80,27 +80,24 @@ public class Moto extends CupoDiario {
 		tipo="M";
 	}
 	public double calcularCobro(){
-		long mediaHora = Long.parseLong(WinRegistry.leerConfig("Moto", "mediaHora")),
-		unaHora = Long.parseLong(WinRegistry.leerConfig("Moto", "unaHora")),
-		porHora = Long.parseLong(WinRegistry.leerConfig("Moto", "porHora"));
-		
-		this.tiempoTranscurrido = Math.ceil(this.tiempoTranscurrido/60.0);
-		if(this.tiempoTranscurrido>60){
-			this.valorCobrado=Math.ceil(this.tiempoTranscurrido/60.0)*porHora;
-			this.valorAsignado=valorCobrado;
-			return this.valorCobrado;
+		this.valorAsignado=0;
+		long porHora = Long.parseLong(WinRegistry.leerConfig("Moto", "porHora")),
+		porFraccion = Long.parseLong(WinRegistry.leerConfig("Moto", "porFraccion")),
+		tiempoFraccion = Long.parseLong(WinRegistry.leerConfig("Moto", "tiempoFraccion"));
+		if(this.lockerAsignado!=null){
+			this.valorAsignado+=300;
 		}
-		else{
-			if(this.tiempoTranscurrido<=30){
-				this.valorCobrado=mediaHora;
-				this.valorAsignado=valorCobrado;
-				return this.valorCobrado;
-			}
-			else{
-				this.valorCobrado=unaHora;
-				this.valorAsignado=valorCobrado;
-				return this.valorCobrado;
-			}
-		}		
+		this.tiempoTranscurrido = Math.ceil(this.tiempoTranscurrido/60.0);
+		int horas = (int) (this.tiempoTranscurrido/60);
+		int minutos = (int) (this.tiempoTranscurrido%60);
+		int fracciones = 0;
+		if(minutos%tiempoFraccion<tiempoFraccion && minutos/tiempoFraccion>0){
+			horas++;
+		}else{
+			fracciones++;
+		}
+		this.valorAsignado = (horas * porHora) + (fracciones * porFraccion);
+		this.valorCobrado = this.valorAsignado;
+		return this.valorAsignado;
 	}
 }
