@@ -45,6 +45,7 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import contabilidad.Contabilidad;
+import contabilidad.ContabilidadMensual;
 import contabilidad.RegistroDiario;
 import javafx.scene.chart.PieChart.Data;
 import javafx.scene.input.KeyCode;
@@ -89,6 +90,9 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.ImageIcon;
 import java.awt.SystemColor;
 import javax.swing.border.TitledBorder;
+import javax.swing.JComboBox;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 @SuppressWarnings("unused")
 public class InterfazGrafica {
@@ -99,7 +103,7 @@ public class InterfazGrafica {
 	private JTable tableMotosDiario;
 	private String[] columnastableMotosDiarioS = {"Recibo","Placa","Tipo","Locker","Cascos","Entrada","Cliente"};
 	private String[] columnastHistorialS = {"Placa", "Locker", "Cantidad", "Pagado", "Tiempo","Entrada","Salida"};
-	private String[] columnastMensualS = {"Nombre","Placa","Celular", "Sig.Cobro"};
+	private String[] columnastMensualS = {"Nombre","Placa","Tipo","Celular", "Sig.Cobro","Mensualidad"};
 	@SuppressWarnings("rawtypes")
 	private Vector columnasMotosDiarioV = new Vector();
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -149,7 +153,6 @@ public class InterfazGrafica {
 	private JButton btnMenRetirar;
 	private JPopupMenu popupMenu = new JPopupMenu();
 	private JPopupMenu popupMenuDiario = new JPopupMenu();
-	private JTextField txtMenMensualidad;
 	private JTextField txtAdmMH;
 	private JTextField txtAdmUH;
 	private JTextField txtAdmPH;
@@ -166,6 +169,9 @@ public class InterfazGrafica {
 	private JTextField txtCarrotFraccion;
 	private JTextField txtConNumLock;
 	private JTextField txtConPref;
+	private JTextField txtMenMensualidadIn;
+	@SuppressWarnings("rawtypes")
+	private JComboBox comboMenTipo;
 	/**
 	 * Launch the application.
 	 */
@@ -204,6 +210,9 @@ public class InterfazGrafica {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void initialize() {
 		WinRegistry.inicializarConfig();
+		if(parqueadero.getContabilidadMensual()==null){
+			parqueadero.setContabilidadMensual(new ContabilidadMensual());
+		}
 		frmMotoparqueo = new JFrame();
 		frmMotoparqueo.getContentPane().setBackground(Color.BLACK);
 		frmMotoparqueo.setFont(new Font("Arial", Font.PLAIN, 18));
@@ -482,7 +491,6 @@ public class InterfazGrafica {
 			@Override
 			public void componentShown(ComponentEvent e) {
 				actualizarTMensual();
-				txtMenMensualidad.setText(String.valueOf(parqueadero.getMensualidad()));
 			}
 		});
 		panelMensual.addFocusListener(new FocusAdapter() {
@@ -598,7 +606,7 @@ public class InterfazGrafica {
 			}
 		});
 		btnMenIngresar.setFont(new Font("Arial", Font.PLAIN, 20));
-		btnMenIngresar.setBounds(1122, 215, 257, 40);
+		btnMenIngresar.setBounds(1122, 297, 257, 40);
 		panelMensual.add(btnMenIngresar);
 		
 		txtMenPlacaPago = new JTextField();
@@ -610,13 +618,13 @@ public class InterfazGrafica {
 		txtMenPlacaPago.setHorizontalAlignment(SwingConstants.LEFT);
 		txtMenPlacaPago.setFont(new Font("Arial", Font.PLAIN, 20));
 		txtMenPlacaPago.setColumns(10);
-		txtMenPlacaPago.setBounds(1213, 311, 166, 30);
+		txtMenPlacaPago.setBounds(1213, 362, 166, 30);
 		panelMensual.add(txtMenPlacaPago);
 		
 		lblMenPlacaPago = new JLabel("Placa");
 		lblMenPlacaPago.setForeground(Color.WHITE);
 		lblMenPlacaPago.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblMenPlacaPago.setBounds(1122, 314, 81, 24);
+		lblMenPlacaPago.setBounds(1122, 365, 81, 24);
 		panelMensual.add(lblMenPlacaPago);
 		
 		btnPagoMensual = new JButton("Pago");
@@ -626,25 +634,25 @@ public class InterfazGrafica {
 			}
 		});
 		btnPagoMensual.setFont(new Font("Arial", Font.PLAIN, 20));
-		btnPagoMensual.setBounds(1122, 352, 257, 40);
+		btnPagoMensual.setBounds(1122, 403, 257, 40);
 		panelMensual.add(btnPagoMensual);
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBackground(Color.WHITE);
 		separator_1.setForeground(Color.WHITE);
-		separator_1.setBounds(1122, 286, 257, 14);
+		separator_1.setBounds(1122, 348, 257, 14);
 		panelMensual.add(separator_1);
 		
 		JSeparator separator_2 = new JSeparator();
 		separator_2.setForeground(Color.WHITE);
 		separator_2.setBackground(Color.WHITE);
-		separator_2.setBounds(1122, 413, 257, 14);
+		separator_2.setBounds(1122, 617, 257, 8);
 		panelMensual.add(separator_2);
 		
 		JLabel lblMenPlacaRetirar = new JLabel("Placa");
 		lblMenPlacaRetirar.setForeground(Color.WHITE);
 		lblMenPlacaRetirar.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblMenPlacaRetirar.setBounds(1122, 435, 81, 24);
+		lblMenPlacaRetirar.setBounds(1122, 633, 81, 24);
 		panelMensual.add(lblMenPlacaRetirar);
 		
 		txtMenRetirar = new JTextField();
@@ -656,7 +664,7 @@ public class InterfazGrafica {
 		txtMenRetirar.setHorizontalAlignment(SwingConstants.LEFT);
 		txtMenRetirar.setFont(new Font("Arial", Font.PLAIN, 20));
 		txtMenRetirar.setColumns(10);
-		txtMenRetirar.setBounds(1213, 432, 166, 30);
+		txtMenRetirar.setBounds(1213, 630, 166, 30);
 		panelMensual.add(txtMenRetirar);
 		
 		btnMenRetirar = new JButton("Retirar");
@@ -666,34 +674,39 @@ public class InterfazGrafica {
 			}
 		});
 		btnMenRetirar.setFont(new Font("Arial", Font.PLAIN, 20));
-		btnMenRetirar.setBounds(1122, 473, 257, 40);
+		btnMenRetirar.setBounds(1122, 671, 257, 40);
 		panelMensual.add(btnMenRetirar);
 		
-		JLabel lblMenMen = new JLabel("Mensualidad");
-		lblMenMen.setForeground(Color.WHITE);
-		lblMenMen.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblMenMen.setBounds(1122, 722, 123, 24);
-		panelMensual.add(lblMenMen);
+		txtMenMensualidadIn = new JTextField();
+		txtMenMensualidadIn.setHorizontalAlignment(SwingConstants.LEFT);
+		txtMenMensualidadIn.setFont(new Font("Arial", Font.PLAIN, 20));
+		txtMenMensualidadIn.setColumns(10);
+		txtMenMensualidadIn.setBounds(1250, 256, 129, 30);
+		panelMensual.add(txtMenMensualidadIn);
 		
-		txtMenMensualidad = new JTextField();
-		txtMenMensualidad.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				parqueadero.setMensualidad(Integer.parseInt(txtMenMensualidad.getText().trim()));
-				JOptionPane.showMessageDialog(null, "Actualizado el precio de mensualidad.");
-				txtMenMensualidad.setText(String.valueOf(parqueadero.getMensualidad()));			
+		JLabel lblMenMensualidad = new JLabel("Mensualidad");
+		lblMenMensualidad.setForeground(Color.WHITE);
+		lblMenMensualidad.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblMenMensualidad.setBounds(1122, 259, 123, 24);
+		panelMensual.add(lblMenMensualidad);
+		
+		JLabel lblMenTipo = new JLabel("Tipo");
+		lblMenTipo.setForeground(Color.WHITE);
+		lblMenTipo.setFont(new Font("Arial", Font.PLAIN, 20));
+		lblMenTipo.setBounds(1122, 218, 81, 24);
+		panelMensual.add(lblMenTipo);
+		
+		comboMenTipo = new JComboBox();
+		comboMenTipo.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				txtMenMensualidadIn.setText(WinRegistry.leerConfig("ContabilidadMes", "mes"+(String)comboMenTipo.getSelectedItem()));
 			}
 		});
-		txtMenMensualidad.setHorizontalAlignment(SwingConstants.RIGHT);
-		txtMenMensualidad.setFont(new Font("Arial", Font.PLAIN, 20));
-		txtMenMensualidad.setColumns(10);
-		txtMenMensualidad.setBounds(1242, 719, 137, 30);
-		panelMensual.add(txtMenMensualidad);
-		
-		JSeparator separator_3 = new JSeparator();
-		separator_3.setForeground(Color.WHITE);
-		separator_3.setBackground(Color.WHITE);
-		separator_3.setBounds(1122, 703, 257, 14);
-		panelMensual.add(separator_3);
+		comboMenTipo.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		comboMenTipo.setBounds(1213, 218, 166, 30);
+		comboMenTipo.addItem("Moto");
+		comboMenTipo.addItem("Carro");
+		panelMensual.add(comboMenTipo);
 		tabbedPane.addTab("Administracion", null, panelAdmin, null);
 		panelAdmin.setLayout(null);
 		
@@ -1350,16 +1363,28 @@ public class InterfazGrafica {
 	}
 
 	protected void pagarMensual() {
-		/*CupoMensual cupoAnt = parqueadero.buscarCupoMensual(txtMenPlacaPago.getText().trim().toUpperCase());
-		GregorianCalendar fechaAnt = (GregorianCalendar) cupoAnt.getFechaSiguienteCobro().clone();
-		CupoMensual cupo = parqueadero.pagoMensual(txtMenPlacaPago.getText().trim().toUpperCase());
-		parqueadero.getContabilidad().ingreso(new GregorianCalendar(),cupo);
-		actualizarTMensual();
-		txtMenPlacaPago.setText("");
-		PrintNow.printReciboMensual(fechaAnt, cupo, parqueadero.getMensualidad());
-		JOptionPane.showMessageDialog(null, "Se ha ingresado el pago correctamente.");
-		txtMenPlacaPago.requestFocus();
-		parqueadero.guardar();*/		//deprecated
+		CupoMensual cupoAnt = parqueadero.buscarCupoMensual(txtMenPlacaPago.getText().trim().toUpperCase());
+		if(cupoAnt!=null){
+			String confirmacion = String.format("Esta seguro de facturar con la siguiente informacion?:\nCliente: %s\nPlaca: %s\nMonto: %d\nPeriodo: %s - %s", cupoAnt.getCliente().getNombre(),
+					cupoAnt.getCliente().getPlaca(), cupoAnt.getMensualidad(), Utilidades.formaterFecha(cupoAnt.getFechaSiguienteCobro()),
+							Utilidades.formaterFecha(Utilidades.mesSiguiente(cupoAnt.getFechaSiguienteCobro())));
+			int opcion = JOptionPane.showConfirmDialog(null, confirmacion, "Confirmacion de cobro", JOptionPane.OK_CANCEL_OPTION);
+			if(opcion == 0){
+				cupoAnt.setFechaSiguienteCobro(Utilidades.mesSiguiente(cupoAnt.getFechaSiguienteCobro()));
+				parqueadero.getContabilidadMensual().ingresarCobro(cupoAnt);
+				actualizarTMensual();
+				txtMenPlacaPago.setText("");
+				PrintNow.printReciboMensual(cupoAnt);
+				JOptionPane.showMessageDialog(null, "Se ha ingresado el pago correctamente.");
+				txtMenPlacaPago.requestFocus();
+				parqueadero.guardar();
+			}else{
+				JOptionPane.showMessageDialog(null, "Cobro cancelado.");
+			}
+		}else{
+			JOptionPane.showMessageDialog(null, "Placa no encontrada.");
+			txtMenPlacaPago.setText("");
+		}
 	}
 
 	 protected void ingresarMensual() {
@@ -1367,7 +1392,7 @@ public class InterfazGrafica {
 			parqueadero.ingresarMensual(txtMenNombre.getText().trim().toUpperCase(),
 					txtMenCedula.getText().trim().toUpperCase(), txtMenCelular.getText().trim().toUpperCase(),
 					txtMenPlaca.getText().trim().toUpperCase(),
-					Utilidades.traductorFecha(txtMenIngreso.getText().trim()));
+					Utilidades.traductorFecha(txtMenIngreso.getText().trim()),(String)comboMenTipo.getSelectedItem(),Integer.parseInt(txtMenMensualidadIn.getText()));
 			actualizarTMensual();
 			txtMenNombre.setText("");
 			txtMenCedula.setText("");
@@ -1378,7 +1403,10 @@ public class InterfazGrafica {
 			txtMenNombre.requestFocus();
 			parqueadero.guardar();
 		}else{
-			parqueadero.corregirMensual(txtMenNombre.getText().trim().toUpperCase(), txtMenCedula.getText().trim().toUpperCase(), txtMenCelular.getText().trim().toUpperCase(), txtMenPlaca.getText().trim().toUpperCase(), Utilidades.traductorFecha(txtMenIngreso.getText()));
+			parqueadero.corregirMensual(txtMenNombre.getText().trim().toUpperCase(), txtMenCedula.getText().trim().toUpperCase(),
+					txtMenCelular.getText().trim().toUpperCase(), txtMenPlaca.getText().trim().toUpperCase(),
+					Utilidades.traductorFecha(txtMenIngreso.getText()),(String)comboMenTipo.getSelectedItem(),
+					Integer.parseInt(txtMenMensualidadIn.getText()));
 			actualizarTMensual();
 			txtMenNombre.setText("");
 			txtMenCedula.setText("");
@@ -1398,9 +1426,11 @@ public class InterfazGrafica {
 			for (CupoMensual next : parqueadero.getCuposMensuales()) {
 				Vector fila = new Vector();
 				fila.add(next.getCliente().getNombre());
-				fila.add(next.getCliente().getPlaca());				
+				fila.add(next.getCliente().getPlaca());
+				fila.add(next.getTipo());
 				fila.add(next.getCliente().getCelular());
 				fila.add(Utilidades.formaterFecha(next.getFechaSiguienteCobro()));
+				fila.add(next.getMensualidad());
 				rowDatatMensual.add(fila);
 			}
 			Collections.reverse(rowDatatMensual);
@@ -1424,6 +1454,8 @@ public class InterfazGrafica {
 		txtMenCelular.setText(cupo.getCliente().getCelular());
 		txtMenPlaca.setText(cupo.getCliente().getPlaca());
 		txtMenIngreso.setText(Utilidades.formaterFecha(cupo.getFechaIngreso()));
+		comboMenTipo.setSelectedItem(cupo.getTipo());
+		txtMenMensualidadIn.setText(String.valueOf(cupo.getMensualidad()));
 	}
 
 	protected void cerrarDia() {
@@ -1737,5 +1769,12 @@ public class InterfazGrafica {
 	}
 	public JTextField getTxtConNumLock() {
 		return txtConNumLock;
+	}
+	@SuppressWarnings("rawtypes")
+	public JComboBox getComboMenTipo() {
+		return comboMenTipo;
+	}
+	public JTextField getTxtMenMensualidadIn() {
+		return txtMenMensualidadIn;
 	}
 }

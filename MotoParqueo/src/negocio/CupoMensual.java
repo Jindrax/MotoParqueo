@@ -8,21 +8,19 @@ public class CupoMensual implements Serializable{
 	private GregorianCalendar fechaIngreso;
 	private GregorianCalendar fechaSiguienteCobro;
 	private ClienteMensual cliente;
+	private String tipo;
+	private int mensualidad;
 	/**
 	 * 
 	 */
-	public CupoMensual(String placa, String cedula, String nombre, String celular, GregorianCalendar fechaIngreso) {
+	public CupoMensual(String placa, String cedula, String nombre, String celular, GregorianCalendar fechaIngreso, String tipo, int mensualidad) {
 		super();
 		this.cliente = new ClienteMensual(placa, cedula, nombre, celular);
 		this.fechaIngreso = fechaIngreso;
 		GregorianCalendar siguienteCobro = (GregorianCalendar) fechaIngreso.clone();
-		if (siguienteCobro.get(GregorianCalendar.MONTH)<=10) {
-			siguienteCobro.set(GregorianCalendar.MONTH, siguienteCobro.get(GregorianCalendar.MONTH) + 1);
-		}else{
-			siguienteCobro.set(GregorianCalendar.YEAR, siguienteCobro.get(GregorianCalendar.YEAR)+1);
-			siguienteCobro.set(GregorianCalendar.MONTH, 0);
-		}
 		this.fechaSiguienteCobro = siguienteCobro;
+		this.tipo = tipo;
+		this.mensualidad = mensualidad;
 	}
 	public GregorianCalendar getFechaIngreso() {
 		return fechaIngreso;
@@ -41,5 +39,17 @@ public class CupoMensual implements Serializable{
 	}
 	public void setCliente(ClienteMensual cliente) {
 		this.cliente = cliente;
+	}
+	public String getTipo() {
+		return tipo;
+	}
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+	public int getMensualidad() {
+		return mensualidad;
+	}
+	public void setMensualidad(int mensualidad) {
+		this.mensualidad = mensualidad;
 	}	
 }

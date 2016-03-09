@@ -154,7 +154,9 @@ public class PrintNow {
 	private static void addLinea(String linea, int mod, int size){
 		recibo.add(new LineaRecibo(linea, mod, size));
 	}
-	public static void printReciboMensual(GregorianCalendar fechaAnt, CupoMensual cupo, int mensualidad){
+	public static void printReciboMensual(CupoMensual cupo){
+		GregorianCalendar fechaAnt = Utilidades.mesAnterior(cupo.getFechaSiguienteCobro());
+		int mensualidad = cupo.getMensualidad();
 		recibo = new ArrayList<LineaRecibo>();
 		addLinea("    MotoParqueo 259",Font.BOLD,14);
 		addLinea("            Luz Stella Garcia Campos",Font.PLAIN, 8);

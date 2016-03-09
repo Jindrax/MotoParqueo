@@ -406,6 +406,9 @@ public class WinRegistry {
 			if(WinRegistry.readStringSubKeys(user, regkey+"\\Contabilidad")==null){
 				WinRegistry.createKey(user, regkey+"\\Contabilidad");
 			}
+			if(WinRegistry.readStringSubKeys(user, regkey+"\\ContabilidadMes")==null){
+				WinRegistry.createKey(user, regkey+"\\ContabilidadMes");
+			}
 			//Creacion e inicializacion de registros
 			if(WinRegistry.readString(user, regkey+"\\Moto", "porFraccion")==null){
 				WinRegistry.writeStringValue(user, regkey+"\\Moto", "porFraccion", "600");
@@ -436,6 +439,12 @@ public class WinRegistry {
 			}
 			if(WinRegistry.readString(user, regkey+"\\Contabilidad", "consecutivo")==null){
 				WinRegistry.writeStringValue(user, regkey+"\\Contabilidad", "consecutivo", "0");
+			}
+			if(WinRegistry.readString(user, regkey+"\\ContabilidadMes", "mesMoto")==null){
+				WinRegistry.writeStringValue(user, regkey+"\\ContabilidadMes", "mesMoto", "20000");
+			}
+			if(WinRegistry.readString(user, regkey+"\\ContabilidadMes", "mesCarro")==null){
+				WinRegistry.writeStringValue(user, regkey+"\\ContabilidadMes", "mesCarro", "75000");
 			}
 		} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
 			e.printStackTrace();

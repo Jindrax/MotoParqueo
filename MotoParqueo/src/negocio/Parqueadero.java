@@ -16,6 +16,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import contabilidad.Contabilidad;
+import contabilidad.ContabilidadMensual;
 import persistencia.BancoDeDatos;
 import presentacion.Utilidades;
 
@@ -29,6 +30,7 @@ public class Parqueadero implements Serializable{
 	private List<CupoMensual> cuposMensuales = null;
 	private List<Locker> lockers = null;
 	private Contabilidad contabilidad;
+	private ContabilidadMensual contabilidadMensual = null;
 	private static String horaCierre = "7:30 pm";
 	private List<String> baneados = null;
 	private CupoDiario cupoDiaAux = null;
@@ -349,8 +351,8 @@ public class Parqueadero implements Serializable{
 	public void unban(String ban){
 		baneados.remove(ban);
 	}
-	public CupoMensual ingresarMensual(String nombre, String cedula, String celular, String placa, GregorianCalendar fechaIngreso){
-		CupoMensual retorno = new CupoMensual(placa, cedula, nombre, celular, fechaIngreso);
+	public CupoMensual ingresarMensual(String nombre, String cedula, String celular, String placa, GregorianCalendar fechaIngreso, String tipo, int mensualidad){
+		CupoMensual retorno = new CupoMensual(placa, cedula, nombre, celular, fechaIngreso, tipo, mensualidad);
 		cuposMensuales.add(retorno);
 		return retorno;
 	}
@@ -384,32 +386,15 @@ public class Parqueadero implements Serializable{
 		}
 		return null;
 	}
-	public void corregirMensual(String nombre, String cedula, String celular, String placa, GregorianCalendar ingreso){
+	public void corregirMensual(String nombre, String cedula, String celular, String placa, GregorianCalendar ingreso, String tipo, int mensualidad){
 		CupoMensual cupo = buscarCupoMensual(placa);
 		cupo.getCliente().setNombre(nombre);
 		cupo.getCliente().setCedula(cedula);
 		cupo.getCliente().setCelular(celular);
 		cupo.getCliente().setPlaca(placa);
-		cupo.setFechaIngreso(ingreso); 
-	}
-	private GregorianCalendar calcularSigCobro(GregorianCalendar ingreso){
-		GregorianCalendar siguienteCobro = (GregorianCalendar) ingreso.clone();
-		if (siguienteCobro.get(GregorianCalendar.MONTH)<=10) {
-			siguienteCobro.set(GregorianCalendar.MONTH, siguienteCobro.get(GregorianCalendar.MONTH) + 1);
-		}else{
-			siguienteCobro.set(GregorianCalendar.YEAR, siguienteCobro.get(GregorianCalendar.YEAR)+1);
-			siguienteCobro.set(GregorianCalendar.MONTH, 0);
-		}
-		return siguienteCobro;
-	}
-	public CupoMensual pagoMensual(String placa){
-		for(CupoMensual next: cuposMensuales){
-			if(next.getCliente().getPlaca().equals(placa)){
-				next.setFechaSiguienteCobro(calcularSigCobro(next.getFechaSiguienteCobro()));
-				return next;
-			}
-		}
-		return null;
+		cupo.setFechaIngreso(ingreso);
+		cupo.setTipo(tipo);
+		cupo.setMensualidad(mensualidad);
 	}
 	public boolean anularCupoDiario(CupoDiario cupo){
 		if (cuposDiarios.remove(cupo)) {
@@ -528,5 +513,11 @@ public class Parqueadero implements Serializable{
 			nuevoCupo.getCliente().setCobroTotal((int) (nuevoCupo.getCliente().getCobroTotal() + nuevoCupo.getValorCobrado()));
 			return nuevoCupo;
 		}
+	}
+	public ContabilidadMensual getContabilidadMensual() {
+		return contabilidadMensual;
+	}
+	public void setContabilidadMensual(ContabilidadMensual contabilidadMensual) {
+		this.contabilidadMensual = contabilidadMensual;
 	}
 }

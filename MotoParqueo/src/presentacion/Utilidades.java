@@ -108,4 +108,26 @@ public class Utilidades {
 			return retorno;
 		}
 	}
+	public static GregorianCalendar mesAnterior(GregorianCalendar mes){
+		GregorianCalendar siguienteCobro = (GregorianCalendar) mes.clone();
+		int mesActual = siguienteCobro.get(GregorianCalendar.MONTH);
+		int annoActual = siguienteCobro.get(GregorianCalendar.YEAR);
+		if (mesActual==0) {
+			siguienteCobro.set(GregorianCalendar.MONTH, 11);
+			siguienteCobro.set(GregorianCalendar.YEAR,annoActual-1);
+		}else{
+			siguienteCobro.set(GregorianCalendar.MONTH, mesActual-1);
+		}
+		return siguienteCobro;
+	}
+	public static GregorianCalendar mesSiguiente(GregorianCalendar mes){
+		GregorianCalendar siguienteCobro = (GregorianCalendar) mes.clone();
+		if (siguienteCobro.get(GregorianCalendar.MONTH)<=10) {
+			siguienteCobro.set(GregorianCalendar.MONTH, siguienteCobro.get(GregorianCalendar.MONTH) + 1);
+		}else{
+			siguienteCobro.set(GregorianCalendar.YEAR, siguienteCobro.get(GregorianCalendar.YEAR)+1);
+			siguienteCobro.set(GregorianCalendar.MONTH, 0);
+		}
+		return siguienteCobro;
+	}
 }
