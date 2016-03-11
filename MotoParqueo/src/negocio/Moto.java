@@ -96,7 +96,7 @@ public class Moto extends CupoDiario {
 		}else{
 			fracciones++;
 		}
-		this.valorAsignado = (horas * porHora) + (fracciones * porFraccion);
+		this.valorAsignado += (horas * porHora) + (fracciones * porFraccion);
 		this.valorCobrado = this.valorAsignado;
 		return this.valorAsignado;
 	}

@@ -1,7 +1,10 @@
 package presentacion;
 
+import java.io.File;
 import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
+
+import javax.swing.JOptionPane;
 
 import negocio.Locker;
 
@@ -129,5 +132,19 @@ public class Utilidades {
 			siguienteCobro.set(GregorianCalendar.MONTH, 0);
 		}
 		return siguienteCobro;
+	}
+	public static void createFolder(String path){
+		File pathFile = new File(path);
+		if (!pathFile.exists()) {
+			try {
+				if (pathFile.mkdirs()) {
+					JOptionPane.showMessageDialog(null, "Se creo el directorio correctamente.");
+				} else {
+					JOptionPane.showMessageDialog(null, "No se creo el directorio.");
+				}
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "No se pudo crear la ruta.");
+			}
+		}
 	}
 }

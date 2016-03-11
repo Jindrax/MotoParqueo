@@ -4,7 +4,6 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
-import negocio.Config;
 import negocio.CupoDiario;
 import negocio.CupoMensual;
 import negocio.Moto;
@@ -180,6 +179,7 @@ public class InterfazGrafica {
 			public void run() {
 				try {
 					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+					WinRegistry.inicializarConfig();
 					List<String> preferidos;
 					preferidos = new ArrayList<String>(); 
 					String preferido = WinRegistry.leerConfig("Lockers", "preferidos");
@@ -209,7 +209,10 @@ public class InterfazGrafica {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void initialize() {
-		WinRegistry.inicializarConfig();
+		File backups = new File("backups");
+		if(!backups.exists()){
+			Utilidades.createFolder("backups");
+		}
 		if(parqueadero.getContabilidadMensual()==null){
 			parqueadero.setContabilidadMensual(new ContabilidadMensual());
 		}
@@ -245,7 +248,7 @@ public class InterfazGrafica {
 		frmMotoparqueo.setIconImage(Toolkit.getDefaultToolkit().getImage(InterfazGrafica.class.getResource("/recursos/Icono Parqueadero 32.jpg")));
 		frmMotoparqueo.setTitle("OPYTRANS LTDA.");
 		frmMotoparqueo.setResizable(false);
-		frmMotoparqueo.setBounds(10, 10, 1420, 843);
+		frmMotoparqueo.setBounds(10, 10, 1346, 710);
 		frmMotoparqueo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmMotoparqueo.getContentPane().setLayout(null);
 		
@@ -253,7 +256,7 @@ public class InterfazGrafica {
 		tabbedPane.setBorder(null);
 		tabbedPane.setBackground(Color.BLACK);
 		tabbedPane.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		tabbedPane.setBounds(10, 11, 1394, 799);
+		tabbedPane.setBounds(0, 0, 1340, 681);
 		frmMotoparqueo.getContentPane().add(tabbedPane);
 		
 		rowDataMotosDiario = new Vector();
@@ -284,7 +287,7 @@ public class InterfazGrafica {
 		panelDiario.setLayout(null);
 		
 		scrollPaneDiario = new JScrollPane();
-		scrollPaneDiario.setBounds(10, 11, 1015, 740);
+		scrollPaneDiario.setBounds(10, 11, 1015, 614);
 		panelDiario.add(scrollPaneDiario);
 		scrollPaneDiario.setViewportView(getTableMotosDiario());
 		
@@ -296,7 +299,7 @@ public class InterfazGrafica {
 				procesoPrincipal();
 			}
 		});
-		btnRegistrar.setBounds(1259, 87, 120, 40);
+		btnRegistrar.setBounds(1200, 87, 120, 40);
 		panelDiario.add(btnRegistrar);
 		
 		JLabel lblValor = new JLabel("Valor");
@@ -320,7 +323,7 @@ public class InterfazGrafica {
 		});
 		textoValor.setHorizontalAlignment(SwingConstants.RIGHT);
 		textoValor.setText("0");
-		textoValor.setBounds(1147, 228, 232, 53);
+		textoValor.setBounds(1147, 228, 173, 53);
 		panelDiario.add(textoValor);
 		textoValor.setColumns(10);
 		
@@ -328,7 +331,7 @@ public class InterfazGrafica {
 		eTiempo.setForeground(Color.WHITE);
 		eTiempo.setFont(new Font("Arial", Font.PLAIN, 20));
 		eTiempo.setHorizontalAlignment(SwingConstants.RIGHT);
-		eTiempo.setBounds(1035, 292, 344, 24);
+		eTiempo.setBounds(1035, 292, 285, 24);
 		panelDiario.add(eTiempo);
 		
 		btnCobrar = new JButton("Cobrar");
@@ -338,13 +341,13 @@ public class InterfazGrafica {
 				cobrar();
 			}
 		});
-		btnCobrar.setBounds(1223, 354, 156, 40);
+		btnCobrar.setBounds(1191, 354, 129, 40);
 		panelDiario.add(btnCobrar);
 		
 		JSeparator separator = new JSeparator();
 		separator.setForeground(Color.BLACK);
 		separator.setBackground(Color.BLACK);
-		separator.setBounds(1035, 150, 344, 5);
+		separator.setBounds(1035, 150, 285, 2);
 		panelDiario.add(separator);
 		
 		JButton btnImprimir = new JButton("Imprimir");
@@ -354,18 +357,18 @@ public class InterfazGrafica {
 				printCobrar();
 			}
 		});
-		btnImprimir.setBounds(1035, 354, 163, 40);
+		btnImprimir.setBounds(1035, 354, 146, 40);
 		panelDiario.add(btnImprimir);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		panel_1.setBackground(Color.BLACK);
-		panel_1.setBounds(1035, 177, 344, 47);
+		panel_1.setBounds(1035, 177, 285, 47);
 		panelDiario.add(panel_1);
 		panel_1.setLayout(null);
 		
 		ePlaca = new JLabel("0");
-		ePlaca.setBounds(111, 0, 230, 47);
+		ePlaca.setBounds(112, 0, 173, 47);
 		ePlaca.setForeground(Color.WHITE);
 		panel_1.add(ePlaca);
 		ePlaca.setFont(new Font("Arial", Font.PLAIN, 40));
@@ -380,7 +383,7 @@ public class InterfazGrafica {
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		panel_2.setBackground(Color.BLACK);
-		panel_2.setBounds(1035, 11, 344, 30);
+		panel_2.setBounds(1035, 11, 285, 30);
 		panelDiario.add(panel_2);
 		panel_2.setLayout(null);
 		
@@ -391,7 +394,7 @@ public class InterfazGrafica {
 		lblPlaca.setFont(new Font("Arial", Font.PLAIN, 20));
 		
 		textoPlaca = new JTextField();
-		textoPlaca.setBounds(178, 0, 166, 30);
+		textoPlaca.setBounds(121, 0, 166, 30);
 		panel_2.add(textoPlaca);
 		textoPlaca.addFocusListener(new FocusAdapter() {
 			@Override
@@ -420,7 +423,7 @@ public class InterfazGrafica {
 		JPanel panel_3 = new JPanel();
 		panel_3.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		panel_3.setBackground(Color.RED);
-		panel_3.setBounds(1035, 46, 344, 30);
+		panel_3.setBounds(1035, 46, 285, 30);
 		panelDiario.add(panel_3);
 		panel_3.setLayout(null);
 		
@@ -431,7 +434,7 @@ public class InterfazGrafica {
 		lblCascos.setFont(new Font("Arial", Font.PLAIN, 20));
 		
 		textoCascos = new JTextField();
-		textoCascos.setBounds(178, 0, 166, 30);
+		textoCascos.setBounds(119, 0, 166, 30);
 		panel_3.add(textoCascos);
 		textoCascos.setFont(new Font("Arial", Font.PLAIN, 20));
 		textoCascos.addActionListener(new ActionListener() {
@@ -450,8 +453,8 @@ public class InterfazGrafica {
 		textoCascos.setColumns(10);
 		
 		JLabel label = new JLabel("");
-		label.setIcon(new ImageIcon(InterfazGrafica.class.getResource("/recursos/Logo parqueadero.jpg")));
-		label.setBounds(1050, 628, 314, 121);
+		label.setIcon(new ImageIcon(InterfazGrafica.class.getResource("/recursos/Logo Parqueadero.jpg")));
+		label.setBounds(1035, 504, 285, 121);
 		panelDiario.add(label);
 		
 		JPanel panelAdmin = new JPanel();
@@ -503,7 +506,7 @@ public class InterfazGrafica {
 		panelMensual.setLayout(null);
 		
 		scrollMensual = new JScrollPane();
-		scrollMensual.setBounds(10, 11, 1102, 738);
+		scrollMensual.setBounds(10, 11, 1042, 614);
 		panelMensual.add(scrollMensual);
 		
 		tMensual = new JTable(rowDatatMensual, columnastMensualV);
@@ -512,7 +515,7 @@ public class InterfazGrafica {
 		lblMenNombre = new JLabel("Nombre");
 		lblMenNombre.setForeground(Color.WHITE);
 		lblMenNombre.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblMenNombre.setBounds(1122, 14, 81, 24);
+		lblMenNombre.setBounds(1062, 14, 81, 24);
 		panelMensual.add(lblMenNombre);
 		
 		txtMenNombre = new JTextField();
@@ -524,31 +527,31 @@ public class InterfazGrafica {
 		txtMenNombre.setHorizontalAlignment(SwingConstants.LEFT);
 		txtMenNombre.setFont(new Font("Arial", Font.PLAIN, 20));
 		txtMenNombre.setColumns(10);
-		txtMenNombre.setBounds(1213, 11, 166, 30);
+		txtMenNombre.setBounds(1153, 11, 166, 30);
 		panelMensual.add(txtMenNombre);
 		
 		lblMenCedula = new JLabel("Cedula");
 		lblMenCedula.setForeground(Color.WHITE);
 		lblMenCedula.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblMenCedula.setBounds(1122, 57, 81, 24);
+		lblMenCedula.setBounds(1062, 57, 81, 24);
 		panelMensual.add(lblMenCedula);
 		
 		lblMenCelular = new JLabel("Celular");
 		lblMenCelular.setForeground(Color.WHITE);
 		lblMenCelular.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblMenCelular.setBounds(1122, 98, 81, 24);
+		lblMenCelular.setBounds(1062, 98, 81, 24);
 		panelMensual.add(lblMenCelular);
 		
 		lblMenPlaca = new JLabel("Placa");
 		lblMenPlaca.setForeground(Color.WHITE);
 		lblMenPlaca.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblMenPlaca.setBounds(1122, 139, 81, 24);
+		lblMenPlaca.setBounds(1062, 139, 81, 24);
 		panelMensual.add(lblMenPlaca);
 		
 		lblMenIngreso = new JLabel("Ingreso");
 		lblMenIngreso.setForeground(Color.WHITE);
 		lblMenIngreso.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblMenIngreso.setBounds(1122, 180, 81, 24);
+		lblMenIngreso.setBounds(1062, 180, 81, 24);
 		panelMensual.add(lblMenIngreso);
 		
 		txtMenCedula = new JTextField();
@@ -560,7 +563,7 @@ public class InterfazGrafica {
 		txtMenCedula.setHorizontalAlignment(SwingConstants.LEFT);
 		txtMenCedula.setFont(new Font("Arial", Font.PLAIN, 20));
 		txtMenCedula.setColumns(10);
-		txtMenCedula.setBounds(1213, 54, 166, 30);
+		txtMenCedula.setBounds(1153, 54, 166, 30);
 		panelMensual.add(txtMenCedula);
 		
 		txtMenCelular = new JTextField();
@@ -572,7 +575,7 @@ public class InterfazGrafica {
 		txtMenCelular.setHorizontalAlignment(SwingConstants.LEFT);
 		txtMenCelular.setFont(new Font("Arial", Font.PLAIN, 20));
 		txtMenCelular.setColumns(10);
-		txtMenCelular.setBounds(1213, 95, 166, 30);
+		txtMenCelular.setBounds(1153, 95, 166, 30);
 		panelMensual.add(txtMenCelular);
 		
 		txtMenPlaca = new JTextField();
@@ -584,7 +587,7 @@ public class InterfazGrafica {
 		txtMenPlaca.setHorizontalAlignment(SwingConstants.LEFT);
 		txtMenPlaca.setFont(new Font("Arial", Font.PLAIN, 20));
 		txtMenPlaca.setColumns(10);
-		txtMenPlaca.setBounds(1213, 136, 166, 30);
+		txtMenPlaca.setBounds(1153, 136, 166, 30);
 		panelMensual.add(txtMenPlaca);
 		
 		txtMenIngreso = new JTextField();
@@ -596,7 +599,7 @@ public class InterfazGrafica {
 		txtMenIngreso.setHorizontalAlignment(SwingConstants.LEFT);
 		txtMenIngreso.setFont(new Font("Arial", Font.PLAIN, 20));
 		txtMenIngreso.setColumns(10);
-		txtMenIngreso.setBounds(1213, 177, 166, 30);
+		txtMenIngreso.setBounds(1153, 177, 166, 30);
 		panelMensual.add(txtMenIngreso);
 		
 		btnMenIngresar = new JButton("Ingresar");
@@ -606,7 +609,7 @@ public class InterfazGrafica {
 			}
 		});
 		btnMenIngresar.setFont(new Font("Arial", Font.PLAIN, 20));
-		btnMenIngresar.setBounds(1122, 297, 257, 40);
+		btnMenIngresar.setBounds(1062, 297, 257, 40);
 		panelMensual.add(btnMenIngresar);
 		
 		txtMenPlacaPago = new JTextField();
@@ -618,13 +621,13 @@ public class InterfazGrafica {
 		txtMenPlacaPago.setHorizontalAlignment(SwingConstants.LEFT);
 		txtMenPlacaPago.setFont(new Font("Arial", Font.PLAIN, 20));
 		txtMenPlacaPago.setColumns(10);
-		txtMenPlacaPago.setBounds(1213, 362, 166, 30);
+		txtMenPlacaPago.setBounds(1153, 362, 166, 30);
 		panelMensual.add(txtMenPlacaPago);
 		
 		lblMenPlacaPago = new JLabel("Placa");
 		lblMenPlacaPago.setForeground(Color.WHITE);
 		lblMenPlacaPago.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblMenPlacaPago.setBounds(1122, 365, 81, 24);
+		lblMenPlacaPago.setBounds(1062, 365, 81, 24);
 		panelMensual.add(lblMenPlacaPago);
 		
 		btnPagoMensual = new JButton("Pago");
@@ -634,25 +637,25 @@ public class InterfazGrafica {
 			}
 		});
 		btnPagoMensual.setFont(new Font("Arial", Font.PLAIN, 20));
-		btnPagoMensual.setBounds(1122, 403, 257, 40);
+		btnPagoMensual.setBounds(1062, 403, 257, 40);
 		panelMensual.add(btnPagoMensual);
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBackground(Color.WHITE);
 		separator_1.setForeground(Color.WHITE);
-		separator_1.setBounds(1122, 348, 257, 14);
+		separator_1.setBounds(1062, 348, 257, 14);
 		panelMensual.add(separator_1);
 		
 		JSeparator separator_2 = new JSeparator();
 		separator_2.setForeground(Color.WHITE);
 		separator_2.setBackground(Color.WHITE);
-		separator_2.setBounds(1122, 617, 257, 8);
+		separator_2.setBounds(1062, 528, 257, 8);
 		panelMensual.add(separator_2);
 		
 		JLabel lblMenPlacaRetirar = new JLabel("Placa");
 		lblMenPlacaRetirar.setForeground(Color.WHITE);
 		lblMenPlacaRetirar.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblMenPlacaRetirar.setBounds(1122, 633, 81, 24);
+		lblMenPlacaRetirar.setBounds(1062, 547, 81, 24);
 		panelMensual.add(lblMenPlacaRetirar);
 		
 		txtMenRetirar = new JTextField();
@@ -664,7 +667,7 @@ public class InterfazGrafica {
 		txtMenRetirar.setHorizontalAlignment(SwingConstants.LEFT);
 		txtMenRetirar.setFont(new Font("Arial", Font.PLAIN, 20));
 		txtMenRetirar.setColumns(10);
-		txtMenRetirar.setBounds(1213, 630, 166, 30);
+		txtMenRetirar.setBounds(1153, 544, 166, 30);
 		panelMensual.add(txtMenRetirar);
 		
 		btnMenRetirar = new JButton("Retirar");
@@ -674,26 +677,26 @@ public class InterfazGrafica {
 			}
 		});
 		btnMenRetirar.setFont(new Font("Arial", Font.PLAIN, 20));
-		btnMenRetirar.setBounds(1122, 671, 257, 40);
+		btnMenRetirar.setBounds(1062, 585, 257, 40);
 		panelMensual.add(btnMenRetirar);
 		
 		txtMenMensualidadIn = new JTextField();
 		txtMenMensualidadIn.setHorizontalAlignment(SwingConstants.LEFT);
 		txtMenMensualidadIn.setFont(new Font("Arial", Font.PLAIN, 20));
 		txtMenMensualidadIn.setColumns(10);
-		txtMenMensualidadIn.setBounds(1250, 256, 129, 30);
+		txtMenMensualidadIn.setBounds(1190, 256, 129, 30);
 		panelMensual.add(txtMenMensualidadIn);
 		
 		JLabel lblMenMensualidad = new JLabel("Mensualidad");
 		lblMenMensualidad.setForeground(Color.WHITE);
 		lblMenMensualidad.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblMenMensualidad.setBounds(1122, 259, 123, 24);
+		lblMenMensualidad.setBounds(1062, 259, 123, 24);
 		panelMensual.add(lblMenMensualidad);
 		
 		JLabel lblMenTipo = new JLabel("Tipo");
 		lblMenTipo.setForeground(Color.WHITE);
 		lblMenTipo.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblMenTipo.setBounds(1122, 218, 81, 24);
+		lblMenTipo.setBounds(1062, 218, 81, 24);
 		panelMensual.add(lblMenTipo);
 		
 		comboMenTipo = new JComboBox();
@@ -703,7 +706,7 @@ public class InterfazGrafica {
 			}
 		});
 		comboMenTipo.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-		comboMenTipo.setBounds(1213, 218, 166, 30);
+		comboMenTipo.setBounds(1153, 218, 166, 30);
 		comboMenTipo.addItem("Moto");
 		comboMenTipo.addItem("Carro");
 		panelMensual.add(comboMenTipo);
@@ -713,7 +716,7 @@ public class InterfazGrafica {
 		JLabel lblHoraDeCierre = new JLabel("H. Cierre");
 		lblHoraDeCierre.setForeground(Color.WHITE);
 		lblHoraDeCierre.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblHoraDeCierre.setBounds(1172, 545, 87, 24);
+		lblHoraDeCierre.setBounds(1118, 545, 87, 24);
 		panelAdmin.add(lblHoraDeCierre);
 		
 		tCierre = new JTextField();
@@ -739,7 +742,7 @@ public class InterfazGrafica {
 				}
 			}
 		});
-		tCierre.setBounds(1258, 542, 121, 30);
+		tCierre.setBounds(1204, 542, 121, 30);
 		panelAdmin.add(tCierre);
 		tCierre.setColumns(10);
 		
@@ -753,20 +756,20 @@ public class InterfazGrafica {
 			}
 		});
 		tCons.setHorizontalAlignment(SwingConstants.RIGHT);
-		tCons.setBounds(1224, 580, 155, 30);
+		tCons.setBounds(1170, 580, 155, 30);
 		panelAdmin.add(tCons);
 		tCons.setColumns(10);
 		
 		lblConsecutivo = new JLabel("Cons");
 		lblConsecutivo.setForeground(Color.WHITE);
 		lblConsecutivo.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblConsecutivo.setBounds(1172, 583, 106, 24);
+		lblConsecutivo.setBounds(1118, 583, 106, 24);
 		panelAdmin.add(lblConsecutivo);
 		
 		JLabel lblBan = new JLabel("Ban");
 		lblBan.setForeground(Color.WHITE);
 		lblBan.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblBan.setBounds(1172, 469, 67, 24);
+		lblBan.setBounds(1118, 469, 67, 24);
 		panelAdmin.add(lblBan);
 		
 		txtBan = new JTextField();
@@ -781,13 +784,13 @@ public class InterfazGrafica {
 		txtBan.setHorizontalAlignment(SwingConstants.RIGHT);
 		txtBan.setFont(new Font("Arial", Font.PLAIN, 20));
 		txtBan.setColumns(10);
-		txtBan.setBounds(1238, 466, 141, 30);
+		txtBan.setBounds(1184, 466, 141, 30);
 		panelAdmin.add(txtBan);
 		
 		JLabel lblUnBan = new JLabel("Unban");
 		lblUnBan.setForeground(Color.WHITE);
 		lblUnBan.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblUnBan.setBounds(1172, 507, 67, 24);
+		lblUnBan.setBounds(1118, 507, 67, 24);
 		panelAdmin.add(lblUnBan);
 		
 		txtUnBan = new JTextField();
@@ -802,27 +805,13 @@ public class InterfazGrafica {
 		txtUnBan.setHorizontalAlignment(SwingConstants.RIGHT);
 		txtUnBan.setFont(new Font("Arial", Font.PLAIN, 20));
 		txtUnBan.setColumns(10);
-		txtUnBan.setBounds(1238, 504, 141, 30);
+		txtUnBan.setBounds(1184, 504, 141, 30);
 		panelAdmin.add(txtUnBan);
-		
-		JButton btnAdmAbrirCarpeta = new JButton("Abrir Carpeta");
-		btnAdmAbrirCarpeta.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {				
-				try {
-					Desktop.getDesktop().open(new File(System.getProperty("user.home")+"\\Documents\\Contabilidad-MotoParqueo"));
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
-		btnAdmAbrirCarpeta.setFont(new Font("Arial", Font.PLAIN, 20));
-		btnAdmAbrirCarpeta.setBounds(1172, 716, 207, 33);
-		panelAdmin.add(btnAdmAbrirCarpeta);
 		
 		JTabbedPane tabbedPane_Adm = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane_Adm.setBorder(null);
 		tabbedPane_Adm.setBackground(Color.YELLOW);
-		tabbedPane_Adm.setBounds(10, 11, 1152, 738);
+		tabbedPane_Adm.setBounds(10, 11, 1094, 620);
 		panelAdmin.add(tabbedPane_Adm);
 		
 		tabAdmHDiario = new JPanel();
@@ -837,7 +826,7 @@ public class InterfazGrafica {
 		lblHistorialDiario.setFont(new Font("Arial", Font.PLAIN, 20));
 		
 		scrollHistorial = new JScrollPane();
-		scrollHistorial.setBounds(10, 39, 1127, 660);
+		scrollHistorial.setBounds(10, 39, 1069, 542);
 		tabAdmHDiario.add(scrollHistorial);
 		scrollHistorial.addComponentListener(new ComponentAdapter() {
 			@Override
@@ -970,7 +959,7 @@ public class InterfazGrafica {
 			}
 		});
 		btnAdmIngresar.setFont(new Font("Arial", Font.PLAIN, 20));
-		btnAdmIngresar.setBounds(850, 7, 268, 32);
+		btnAdmIngresar.setBounds(850, 7, 229, 32);
 		tabAdmIngreso.add(btnAdmIngresar);
 		
 		btnAdmCerrarDiaEspecial = new JButton("Cerrar Dia Especial");
@@ -980,7 +969,7 @@ public class InterfazGrafica {
 			}
 		});
 		btnAdmCerrarDiaEspecial.setFont(new Font("Arial", Font.PLAIN, 20));
-		btnAdmCerrarDiaEspecial.setBounds(850, 58, 268, 32);
+		btnAdmCerrarDiaEspecial.setBounds(850, 58, 229, 32);
 		tabAdmIngreso.add(btnAdmCerrarDiaEspecial);
 		
 		JPanel panel_5 = new JPanel();
@@ -992,7 +981,7 @@ public class InterfazGrafica {
 		panel_6.setForeground(Color.BLACK);
 		panel_6.setBackground(Color.RED);
 		panel_6.setBorder(new TitledBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)), "Lockers", TitledBorder.LEADING, TitledBorder.TOP, null, Color.WHITE));
-		panel_6.setBounds(10, 11, 1127, 61);
+		panel_6.setBounds(10, 11, 1069, 61);
 		panel_5.add(panel_6);
 		panel_6.setLayout(null);
 		
@@ -1038,18 +1027,18 @@ public class InterfazGrafica {
 				parqueadero.relistarLockers(Integer.parseInt(WinRegistry.leerConfig("Lockers", "numLock")), preferidos);
 			}
 		});
-		txtConPref.setBounds(209, 24, 908, 20);
+		txtConPref.setBounds(209, 24, 850, 20);
 		panel_6.add(txtConPref);
 		txtConPref.setColumns(10);
 		
 		lblTotalCobrado = new JLabel("Total Cobrado:");
 		lblTotalCobrado.setForeground(Color.WHITE);
-		lblTotalCobrado.setBounds(1181, 334, 198, 30);
+		lblTotalCobrado.setBounds(1127, 334, 198, 30);
 		panelAdmin.add(lblTotalCobrado);
 		lblTotalCobrado.setFont(new Font("Arial", Font.PLAIN, 26));
 		
 		eTotalCobrado = new JLabel("0");
-		eTotalCobrado.setBounds(1181, 375, 192, 30);
+		eTotalCobrado.setBounds(1133, 375, 192, 30);
 		panelAdmin.add(eTotalCobrado);
 		eTotalCobrado.setBackground(Color.WHITE);
 		eTotalCobrado.setForeground(Color.WHITE);
@@ -1063,12 +1052,12 @@ public class InterfazGrafica {
 		eTotalCobrado.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		btnTest = new JButton("Cerrar Dia");
-		btnTest.setBounds(1181, 418, 198, 33);
+		btnTest.setBounds(1127, 418, 198, 33);
 		panelAdmin.add(btnTest);
 		btnTest.setFont(new Font("Arial", Font.PLAIN, 20));
 		
 		JTabbedPane tabbedPane_1 = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane_1.setBounds(1172, 11, 205, 314);
+		tabbedPane_1.setBounds(1118, 11, 205, 314);
 		panelAdmin.add(tabbedPane_1);
 		
 		JPanel panel = new JPanel();
@@ -1520,7 +1509,7 @@ public class InterfazGrafica {
 				e.printStackTrace();
 			}			
 		}
-		parqueadero.guardar();
+		//parqueadero.guardar();
 	}
 	
 	protected void printCobrar() {
@@ -1538,7 +1527,7 @@ public class InterfazGrafica {
 			textoPlaca.setText("");
 			textoPlaca.requestFocus();
 		}
-		parqueadero.guardar();
+		//parqueadero.guardar();
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -1601,8 +1590,7 @@ public class InterfazGrafica {
 				if (!placa.equals("")) {
 					CupoDiario cupo = parqueadero.ingresarDiario(placa, cascos, tipo);
 					if (cupo!=null) {
-						//TODO: Reactivar el servicio de impresion
-						//PrintNow.imprimirReciboEntrada(cupo);									
+						PrintNow.imprimirReciboEntrada(cupo);									
 						actualizarTMotoDiario();
 					}else{
 						JOptionPane.showMessageDialog(null, "Tipo de vehiculo no reconocido.");
@@ -1679,7 +1667,7 @@ public class InterfazGrafica {
 				textoPlaca.requestFocus();
 			}
 		}
-		parqueadero.guardar();
+		//parqueadero.guardar();
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

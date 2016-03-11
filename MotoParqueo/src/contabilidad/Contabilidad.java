@@ -33,8 +33,8 @@ public class Contabilidad implements Serializable{
 	public void ingreso(GregorianCalendar fecha, CupoDiario cupo){
 		RegistroDiario ingreso;
 		int consecutivo = Integer.parseInt(WinRegistry.leerConfig("Contabilidad", "consecutivo"));
-		consecutivo++;
 		ingreso = new RegistroDiario(fecha, cupo, consecutivo);
+		consecutivo++;
 		WinRegistry.guardarConfig("Contabilidad", "consecutivo", String.valueOf(consecutivo));
 		transferencias.add(ingreso);
 		cajaActual += cupo.getValorCobrado();

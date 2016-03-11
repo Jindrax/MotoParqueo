@@ -20,6 +20,7 @@ import javax.imageio.ImageIO;
 
 import negocio.CupoDiario;
 import negocio.CupoMensual;
+import negocio.Moto;
 import negocio.Parqueadero;
 import presentacion.Utilidades;
 
@@ -68,14 +69,16 @@ public class PrintNow {
 		} catch (PrinterException e) {
 			System.err.println(e.getMessage());
 		}
-	}	
+	}
+	public static void encabezado(){
+		addLinea("    OpyTrans LTDA.",Font.BOLD,14);
+		addLinea("          900774637-7"+" "+"Regimen Comun",Font.PLAIN, 8);
+		addLinea("");
+	}
 	public static void imprimirReciboEntrada(CupoDiario cupo){
 		String horaE = Utilidades.formaterHora(cupo.getHoraIngreso());
 		recibo = new ArrayList<LineaRecibo>();
-		addLinea("    MotoParqueo 259",Font.BOLD,14);
-		addLinea("            Luz Stella Garcia Campos",Font.PLAIN, 8);
-		addLinea("    39554400-2"+" "+"Regimen Simplificado",Font.PLAIN, 8);
-		addLinea("");
+		encabezado();
 		if(new GregorianCalendar().get(GregorianCalendar.HOUR_OF_DAY)>=12){
 			if (new GregorianCalendar().get(GregorianCalendar.HOUR_OF_DAY)<19) {
 				addLinea("Buenas Tardes", Font.BOLD, 14);
@@ -90,15 +93,17 @@ public class PrintNow {
 		addLinea(String.valueOf(cupo.getCliente().getPlaca()),Font.BOLD, 14);
 		addLinea("");
 		addLinea("Recibo: "+String.valueOf(cupo.getSerial()), Font.BOLD, 16);
-		if(cupo.getLockerAsignado()!=null){
-			addLinea("Casco(s): "+String.valueOf(cupo.getLockerAsignado().getIdentificador())+"-"+String.valueOf(cupo.getLockerAsignado().getCantidad()), Font.BOLD, 14);	
-		}else{
-			addLinea("Ningun Casco", Font.BOLD, 14);
+		if(cupo instanceof Moto){
+			if(cupo.getLockerAsignado()!=null){
+				addLinea("Casco(s): "+String.valueOf(cupo.getLockerAsignado().getIdentificador())+"-"+String.valueOf(cupo.getLockerAsignado().getCantidad()), Font.BOLD, 14);	
+			}else{
+				addLinea("Ningun Casco", Font.BOLD, 14);
+			}
 		}
 		addLinea("");
 		addLinea("Contacto:");
-		addLinea("3004626139"+"  "+"3167417496");
-		addLinea("Cll. 9 #2-59");
+		addLinea("3125370612");
+		addLinea("Cra 1H #9-18");
 		addLinea("Hoy servicio hasta", Font.BOLD, 12);
 		addLinea(String.valueOf(Parqueadero.getHoraCierre()), Font.BOLD, 12);
 		try {
@@ -111,10 +116,7 @@ public class PrintNow {
 		String horaE = Utilidades.formaterHora(cupo.getHoraIngreso());
 		String horaS = Utilidades.formaterHora(cupo.getHoraSalida());
 		recibo = new ArrayList<LineaRecibo>();
-		addLinea("    MotoParqueo 259",Font.BOLD,14);
-		addLinea("            Luz Stella Garcia Campos",Font.PLAIN, 8);
-		addLinea("    39554400-2"+" "+"Regimen Simplificado",Font.PLAIN, 8);
-		addLinea("");
+		encabezado();
 		if(new GregorianCalendar().get(GregorianCalendar.HOUR_OF_DAY)>=12){
 			if (new GregorianCalendar().get(GregorianCalendar.HOUR_OF_DAY)<19) {
 				addLinea("Buenas Tardes", Font.BOLD, 14);
@@ -128,18 +130,20 @@ public class PrintNow {
 		addLinea(Utilidades.formaterFecha(cupo.getHoraIngreso()),Font.BOLD,14);
 		addLinea("Placa:",Font.BOLD,14);
 		addLinea(String.valueOf(cupo.getCliente().getPlaca()),Font.BOLD,14);
-		if(cupo.getLockerAsignado()!=null){
-			addLinea("Casco(s): "+String.valueOf(cupo.getLockerAsignado().getIdentificador())+"-"+String.valueOf(cupo.getLockerAsignado().getCantidad()), Font.BOLD, 14);	
-		}else{
-			addLinea("Ningun Casco", Font.BOLD, 14);
+		if(cupo instanceof Moto){
+			if(cupo.getLockerAsignado()!=null){
+				addLinea("Casco(s): "+String.valueOf(cupo.getLockerAsignado().getIdentificador())+"-"+String.valueOf(cupo.getLockerAsignado().getCantidad()), Font.BOLD, 14);	
+			}else{
+				addLinea("Ningun Casco", Font.BOLD, 14);
+			}
 		}
 		addLinea(horaE+"------------->"+horaS,Font.BOLD, 14);
 		addLinea(Utilidades.diferenciaHoras(cupo.getHoraIngreso(), cupo.getHoraSalida()),Font.BOLD,14);
 		addLinea("Total: $"+ String.valueOf((int)cupo.getValorCobrado()),Font.BOLD, 14);
 		addLinea("");
 		addLinea("Contacto:");
-		addLinea("3004626139"+"  "+"3167417496");
-		addLinea("Cll. 9 #2-59");
+		addLinea("3125370612");
+		addLinea("Cra 1H #9-18");
 		addLinea("Hoy servicio hasta", Font.BOLD, 12);
 		addLinea(String.valueOf(Parqueadero.getHoraCierre()), Font.BOLD, 12);
 		try {
@@ -158,10 +162,7 @@ public class PrintNow {
 		GregorianCalendar fechaAnt = Utilidades.mesAnterior(cupo.getFechaSiguienteCobro());
 		int mensualidad = cupo.getMensualidad();
 		recibo = new ArrayList<LineaRecibo>();
-		addLinea("    MotoParqueo 259",Font.BOLD,14);
-		addLinea("            Luz Stella Garcia Campos",Font.PLAIN, 8);
-		addLinea("    39554400-2"+" "+"Regimen Simplificado",Font.PLAIN, 8);
-		addLinea("");
+		encabezado();
 		addLinea(Utilidades.formaterFecha(new GregorianCalendar()),Font.BOLD,14);
 		String nombre = "";
 		StringTokenizer token = new StringTokenizer(cupo.getCliente().getNombre(), " ");
@@ -181,7 +182,7 @@ public class PrintNow {
 			addLinea(nombre, Font.BOLD, 10);
 		}
 		addLinea("Ha pagado a:");
-		addLinea("Luz Stella Garcia Campos");
+		addLinea("OpyTrans LTDA.");
 		addLinea("$"+String.valueOf(mensualidad),Font.BOLD,10);
 		addLinea("Por servicio de parqueadero de:");
 		addLinea("moto placa:");
@@ -192,8 +193,8 @@ public class PrintNow {
 		addLinea(Utilidades.formaterFecha(cupo.getFechaSiguienteCobro()),Font.BOLD,10);
 		addLinea("");
 		addLinea("Contacto:");
-		addLinea("3004626139"+"  "+"3167417496");
-		addLinea("Cll. 9 #2-59");
+		addLinea("3125370612");
+		addLinea("Cra 1H #9-18");
 		try {
 			printCard(recibo);
 		} catch (PrinterException e) {
