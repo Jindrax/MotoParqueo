@@ -19,8 +19,8 @@ public class RegistroMensual implements Serializable {
 		super();
 		this.fecha = new GregorianCalendar();
 		int consecutivoActual = Integer.parseInt(WinRegistry.leerConfig("ContabilidadMes", "mesConsecutivo"));
-		consecutivoActual++;
 		this.consecutivo = consecutivoActual;
+		consecutivoActual++;
 		WinRegistry.guardarConfig("ContabilidadMes", "mesConsecutivo", String.valueOf(consecutivoActual));
 		this.id = id;
 		this.nombre = nombre;

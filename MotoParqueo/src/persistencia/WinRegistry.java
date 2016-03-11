@@ -446,6 +446,9 @@ public class WinRegistry {
 			if(WinRegistry.readString(user, regkey+"\\ContabilidadMes", "mesCarro")==null){
 				WinRegistry.writeStringValue(user, regkey+"\\ContabilidadMes", "mesCarro", "75000");
 			}
+			if(WinRegistry.readString(user, regkey+"\\ContabilidadMes", "mesConsecutivo")==null){
+				WinRegistry.writeStringValue(user, regkey+"\\ContabilidadMes", "mesConsecutivo", "0");
+			}
 		} catch (IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
 			e.printStackTrace();
 		}			

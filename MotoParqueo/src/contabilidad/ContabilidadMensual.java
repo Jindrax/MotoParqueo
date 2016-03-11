@@ -2,7 +2,6 @@ package contabilidad;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import negocio.CupoMensual;
@@ -32,10 +31,10 @@ public class ContabilidadMensual implements Serializable {
 				cupo.getCliente().getPlaca(), cupo.getMensualidad(), periodo);
 		registrosMensuales.add(nuevo);
 	}
-	public List<RegistroMensual> getDiaMensuales(GregorianCalendar hoy){
+	public List<RegistroMensual> getDiaMensuales(String hoy){
 		List<RegistroMensual> retorno =  new ArrayList<RegistroMensual>();
 		for(RegistroMensual next: registrosMensuales){
-			if(Utilidades.formaterFecha(hoy)==Utilidades.formaterFecha(next.getFecha())){
+			if(hoy.compareTo(Utilidades.formaterFecha(next.getFecha()))==0){
 				retorno.add(next);
 			}
 		}

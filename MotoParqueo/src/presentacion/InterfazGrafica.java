@@ -1452,11 +1452,19 @@ public class InterfazGrafica {
 		try {
 			if (JOptionPane.showInputDialog("Ingrese la clave para cerrar.").equals(admPass)) {
 				List<RegistroDiario> dia = parqueadero.getContabilidad().getDia(Utilidades.formaterFecha(new GregorianCalendar()));
-				RegistroDiario first = dia.get(0);
-				RegistroDiario last = dia.get(dia.size()-1);
-				PrintNow.printResumenDia(String.valueOf(first.getConsecutivoAsignado()), String.valueOf(last.getConsecutivoAsignado()), String.valueOf(parqueadero.getContabilidad().getCajaActual()));
-				CreateExlFile.guardarContabilidad(parqueadero.getContabilidad(), Utilidades.formaterFecha(new GregorianCalendar()));
-				CreateExlFile.guardarHistorialDia(parqueadero.getDataBank().getHistorialDiario(), Utilidades.formaterFecha(new GregorianCalendar()));
+				if(dia.size()!=0){
+					RegistroDiario first = dia.get(0);
+					RegistroDiario last = dia.get(dia.size()-1);
+					PrintNow.printResumenDia(String.valueOf(first.getConsecutivoAsignado()), String.valueOf(last.getConsecutivoAsignado()), String.valueOf(parqueadero.getContabilidad().getCajaActual()));
+				}
+				String diaString = Utilidades.formaterFecha(new GregorianCalendar());
+				if(parqueadero.getContabilidad().getDia(diaString).size()>0){
+					CreateExlFile.guardarContabilidad(parqueadero.getContabilidad(), diaString);
+					CreateExlFile.guardarHistorialDia(parqueadero.getDataBank().getHistorialDiario(), diaString);
+				}
+				if(parqueadero.getContabilidadMensual().getDiaMensuales(diaString).size()>0){
+					CreateExlFile.guardarContabilidadMensual(parqueadero.getContabilidadMensual(), diaString);
+				}
 				CupoDiario.setId(0);
 				parqueadero.getDataBank().setHistorialDiario(new ArrayList<CupoDiario>());
 				parqueadero.getContabilidad().setCajaActual(0);

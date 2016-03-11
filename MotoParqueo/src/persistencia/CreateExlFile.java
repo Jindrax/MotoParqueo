@@ -15,7 +15,9 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import contabilidad.Contabilidad;
+import contabilidad.ContabilidadMensual;
 import contabilidad.RegistroDiario;
+import contabilidad.RegistroMensual;
 import negocio.CupoDiario;
 import presentacion.Utilidades;
 
@@ -63,6 +65,64 @@ public class CreateExlFile{
 				cell.setCellStyle(styleCons);
 			}
 			total+=next.getCupo().getValorCobrado();
+			i++;
+		}
+		CellStyle styleFooter = wb.createCellStyle();
+		styleFooter.setFont(fuenteHeader);
+		styleFooter.setFillForegroundColor(IndexedColors.RED.getIndex());
+	    styleFooter.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		Row rowFooter = sheetTest.createRow(i);			//Fila de total
+		cell = rowFooter.createCell(columnas.length-2);
+		cell.setCellValue("Total");
+		cell.setCellStyle(styleFooter);
+		cell = rowFooter.createCell(columnas.length-1);
+		cell.setCellValue(total);
+		cell.setCellType(0);
+		cell.setCellStyle(styleFooter);
+		for(int k=0; k<columnas.length;k++){
+			sheetTest.autoSizeColumn(k);
+		}
+	}
+	private static void fillContent(ContabilidadMensual contabilidad, Workbook wb, String hoy){
+		String[] fecha = hoy.split("/");
+		Sheet sheetTest = wb.getSheet(fecha[0]);
+		if(sheetTest==null){
+			sheetTest = wb.createSheet(fecha[0]);
+		}
+		Font fuenteHeader = wb.createFont();
+		fuenteHeader.setBold(true);
+		fuenteHeader.setFontHeightInPoints((short)20);
+		fuenteHeader.setFontName("Times New Roman");
+		CellStyle styleHeader = wb.createCellStyle();
+		styleHeader.setAlignment(CellStyle.ALIGN_CENTER);
+		styleHeader.setFont(fuenteHeader);
+		Row rowHeader = sheetTest.createRow((short) 0);
+		Cell cell = rowHeader.createCell(0);
+		String[] columnas = {"Consecutivo","ID","Nombre", "Placa", "Periodo", "Monto"};
+		for(int j=0; j<columnas.length;j++){
+			cell = rowHeader.createCell(j);
+			cell.setCellValue(columnas[j]);
+			cell.setCellStyle(styleHeader);
+		}
+		int i=1;
+		Font fuenteBody = wb.createFont();
+		fuenteBody.setBold(false);
+		fuenteBody.setFontHeightInPoints((short)16);
+		fuenteBody.setFontName("Times New Roman");
+		CellStyle styleCons = wb.createCellStyle();
+		styleCons.setFont(fuenteBody);
+		styleCons.setAlignment(CellStyle.ALIGN_CENTER);
+		long total=0;
+		for (RegistroMensual next: contabilidad.getDiaMensuales(hoy)) {
+			Row row = sheetTest.createRow((short) i);
+			String[] datos = {String.valueOf(next.getConsecutivo()),next.getId(),next.getNombre(),
+					next.getPlaca(),next.getPeriodo(),String.valueOf(next.getMonto())};
+			for(int k=0; k<datos.length; k++){
+				cell = row.createCell(k);
+				cell.setCellValue(datos[k]);
+				cell.setCellStyle(styleCons);
+			}
+			total += next.getMonto();
 			i++;
 		}
 		CellStyle styleFooter = wb.createCellStyle();
@@ -172,7 +232,35 @@ public class CreateExlFile{
 	}
 	
 	public static void guardarContabilidad(Contabilidad contabilidad, String hoy){
-		String folder = System.getProperty("user.home")+"\\Documents\\Contabilidad-MotoParqueo\\Diario";
+		String folder = System.getProperty("user.home")+"\\Documents\\Contabilidad-Parqueadero\\Diario";
+		createFolder(folder);
+		String[] fecha = hoy.split("/");
+		try {
+			File file = new File(folder+"\\"+fecha[1]+"-"+fecha[2]+".xls");
+			if (file.exists()) {
+				InputStream inp = new FileInputStream(file);
+				Workbook wb = WorkbookFactory.create(inp);
+				fillContent(contabilidad, wb, hoy);
+				FileOutputStream fileOut = new FileOutputStream(file);
+				wb.write(fileOut);
+				fileOut.close();
+				wb.close();
+			}else{
+				file.createNewFile();
+				Workbook wb = new HSSFWorkbook();  // or new XSSFWorkbook();
+				fillContent(contabilidad, wb, hoy);
+				FileOutputStream fileOut = new FileOutputStream(file);
+				wb.write(fileOut);
+				fileOut.close();
+				wb.close();
+			}
+		} catch ( Exception ex ) {
+			ex.printStackTrace();
+			System.out.println(ex);
+		}
+	}
+	public static void guardarContabilidadMensual(ContabilidadMensual contabilidad, String hoy){
+		String folder = System.getProperty("user.home")+"\\Documents\\Contabilidad-Parqueadero\\Mensual";
 		createFolder(folder);
 		String[] fecha = hoy.split("/");
 		try {
