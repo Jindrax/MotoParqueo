@@ -27,6 +27,9 @@ public class Utilidades {
 		int month = cal.get(GregorianCalendar.MONTH);
 		int day = cal.get(GregorianCalendar.DAY_OF_MONTH);
 		month++;
+		if(day<10 && month<10){
+			return "0" + day + "/" + "0" + month + "/" + year;
+		}
 		if(day<10 && month>10){
 			return "0" + day + "/" + month + "/" + year;
 		}
