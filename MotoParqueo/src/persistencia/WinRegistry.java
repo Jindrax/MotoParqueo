@@ -432,10 +432,13 @@ public class WinRegistry {
 				WinRegistry.writeStringValue(user, regkey, "admPass", "123456");
 			}
 			if(WinRegistry.readString(user, regkey+"\\Lockers", "numLock")==null){
-				WinRegistry.writeStringValue(user, regkey+"\\lockers", "numLock", "50");
+				WinRegistry.writeStringValue(user, regkey+"\\Lockers", "numLock", "50");
+			}
+			if(WinRegistry.readString(user, regkey+"\\Lockers", "precioCasco")==null){
+				WinRegistry.writeStringValue(user, regkey+"\\Lockers", "precioCasco", "100");
 			}
 			if(WinRegistry.readString(user, regkey+"\\Lockers", "preferidos")==null){
-				WinRegistry.writeStringValue(user, regkey+"\\lockers", "preferidos", "A:B:C:D:E:F:G:H:I:J:K:L");
+				WinRegistry.writeStringValue(user, regkey+"\\Lockers", "preferidos", "A:B:C:D:E:F:G:H:I:J:K:L");
 			}
 			if(WinRegistry.readString(user, regkey+"\\Contabilidad", "consecutivo")==null){
 				WinRegistry.writeStringValue(user, regkey+"\\Contabilidad", "consecutivo", "0");

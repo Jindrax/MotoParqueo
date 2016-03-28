@@ -61,7 +61,7 @@ public class Parqueadero implements Serializable{
 	}
 	public boolean relistarLockers(int numLock, List<String> prefer){
 		lockers = new ArrayList<Locker>();
-		Locker.setConsecutivo(0);
+		Locker.setConsecutivo(1);
 		for(int i=0; i<numLock; i++){
 			Locker nuevo = new Locker();
 			for(String next: prefer){

@@ -4,7 +4,6 @@
 package negocio;
 
 import java.util.GregorianCalendar;
-
 import persistencia.WinRegistry;
 
 /**
@@ -83,9 +82,11 @@ public class Moto extends CupoDiario {
 		this.valorAsignado=0;
 		long porHora = Long.parseLong(WinRegistry.leerConfig("Moto", "porHora")),
 		porFraccion = Long.parseLong(WinRegistry.leerConfig("Moto", "porFraccion")),
-		tiempoFraccion = Long.parseLong(WinRegistry.leerConfig("Moto", "tiempoFraccion"));
+		tiempoFraccion = Long.parseLong(WinRegistry.leerConfig("Moto", "tiempoFraccion")),
+		precioCasco = Long.parseLong(WinRegistry.leerConfig("Lockers", "precioCasco"));
 		if(this.lockerAsignado!=null){
-			this.valorAsignado+=300;
+			long valorCascos = precioCasco*this.lockerAsignado.getCantidad();
+			this.valorAsignado+=valorCascos;
 		}
 		this.tiempoTranscurrido = Math.ceil(this.tiempoTranscurrido/60.0);
 		int horas = (int) (this.tiempoTranscurrido/60);

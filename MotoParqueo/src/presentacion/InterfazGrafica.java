@@ -171,6 +171,7 @@ public class InterfazGrafica {
 	private JTextField txtMenMensualidadIn;
 	@SuppressWarnings("rawtypes")
 	private JComboBox comboMenTipo;
+	private JTextField txtPrecioCascos;
 	/**
 	 * Launch the application.
 	 */
@@ -987,7 +988,7 @@ public class InterfazGrafica {
 		
 		JLabel lblLockers = new JLabel("# lockers");
 		lblLockers.setForeground(Color.WHITE);
-		lblLockers.setBounds(10, 27, 44, 14);
+		lblLockers.setBounds(10, 27, 53, 14);
 		panel_6.add(lblLockers);
 		
 		txtConNumLock = new JTextField();
@@ -1004,13 +1005,13 @@ public class InterfazGrafica {
 				parqueadero.relistarLockers(Integer.parseInt(WinRegistry.leerConfig("Lockers", "numLock")), preferidos);
 			}
 		});
-		txtConNumLock.setBounds(59, 24, 86, 20);
+		txtConNumLock.setBounds(74, 24, 71, 20);
 		panel_6.add(txtConNumLock);
 		txtConNumLock.setColumns(10);
 		
 		JLabel lblPreferidos = new JLabel("Preferidos");
 		lblPreferidos.setForeground(Color.WHITE);
-		lblPreferidos.setBounds(155, 27, 49, 14);
+		lblPreferidos.setBounds(155, 27, 71, 14);
 		panel_6.add(lblPreferidos);
 		
 		txtConPref = new JTextField();
@@ -1027,9 +1028,33 @@ public class InterfazGrafica {
 				parqueadero.relistarLockers(Integer.parseInt(WinRegistry.leerConfig("Lockers", "numLock")), preferidos);
 			}
 		});
-		txtConPref.setBounds(209, 24, 850, 20);
+		txtConPref.setBounds(238, 24, 819, 20);
 		panel_6.add(txtConPref);
 		txtConPref.setColumns(10);
+		
+		JPanel panel_7 = new JPanel();
+		panel_7.setLayout(null);
+		panel_7.setForeground(Color.BLACK);
+		panel_7.setBorder(new TitledBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)), "Cascos", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(255, 255, 255)));
+		panel_7.setBackground(Color.RED);
+		panel_7.setBounds(10, 85, 1069, 61);
+		panel_5.add(panel_7);
+		
+		JLabel lblPrecioPorCasco = new JLabel("Precio por casco:");
+		lblPrecioPorCasco.setForeground(Color.WHITE);
+		lblPrecioPorCasco.setBounds(10, 27, 120, 14);
+		panel_7.add(lblPrecioPorCasco);
+		
+		txtPrecioCascos = new JTextField();
+		txtPrecioCascos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				WinRegistry.guardarConfig("Lockers", "precioCasco", String.valueOf(txtPrecioCascos.getText()));
+				JOptionPane.showMessageDialog(null, "Valor actualizado.");
+			}
+		});
+		txtPrecioCascos.setColumns(10);
+		txtPrecioCascos.setBounds(119, 24, 92, 20);
+		panel_7.add(txtPrecioCascos);
 		
 		lblTotalCobrado = new JLabel("Total Cobrado:");
 		lblTotalCobrado.setForeground(Color.WHITE);
