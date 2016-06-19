@@ -44,5 +44,20 @@ public class ClienteMensual implements Serializable{
 	}
 	public void setMeses(int meses) {
 		this.meses = meses;
-	}	
+	}
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(cedula);
+		builder.append("|");
+		builder.append(nombre);
+		builder.append("|");
+		builder.append(placa);
+		builder.append("|");
+		builder.append(celular);
+		builder.append("|");
+		builder.append(meses);
+		return builder.toString();
+	}
+		
 }

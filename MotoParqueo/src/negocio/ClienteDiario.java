@@ -36,4 +36,17 @@ public class ClienteDiario implements Serializable{
 	public void setPlaca(String placa) {
 		this.placa = placa;
 	}
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(placa);
+		builder.append("|");
+		builder.append(entradas);
+		builder.append("|");
+		builder.append(minutosReg);
+		builder.append("|");
+		builder.append(cobroTotal);
+		return builder.toString();
+	}
+	
 }

@@ -1,6 +1,7 @@
 package negocio;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
 public class CupoMensual implements Serializable{
@@ -41,5 +42,18 @@ public class CupoMensual implements Serializable{
 	}
 	public void setCliente(ClienteMensual cliente) {
 		this.cliente = cliente;
+	}
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		String pattern = "dd/MM/yyyy";
+	    SimpleDateFormat format = new SimpleDateFormat(pattern);
+		builder.append(format.format(fechaIngreso.getTime()));
+		builder.append("|");
+		builder.append(format.format(fechaSiguienteCobro.getTime()));
+		builder.append("|");
+		builder.append(cliente);
+		return builder.toString();
 	}	
+	
 }

@@ -4,6 +4,8 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
+import negocio.ClienteDiario;
+import negocio.ClienteMensual;
 import negocio.Config;
 import negocio.CupoDiario;
 import negocio.CupoMensual;
@@ -62,7 +64,9 @@ import java.awt.Point;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JPopupMenu;
@@ -1038,6 +1042,15 @@ public class InterfazGrafica {
 		btnAdmCerrarDiaEspecial.setFont(new Font("Arial", Font.PLAIN, 20));
 		btnAdmCerrarDiaEspecial.setBounds(850, 58, 268, 32);
 		tabAdmIngreso.add(btnAdmCerrarDiaEspecial);
+		
+		JButton btnExportar = new JButton("Exportar");
+		btnExportar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				exportarSistema();
+			}
+		});
+		btnExportar.setBounds(938, 640, 180, 59);
+		tabAdmIngreso.add(btnExportar);
 		btnTest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cerrarDia();
@@ -1140,6 +1153,27 @@ public class InterfazGrafica {
 		tableMotosDiario = new JTable(rowDataMotosDiario, columnasMotosDiarioV);
 	}
 	
+	protected void exportarSistema() {
+			List<ClienteDiario> clientesDiarios = parqueadero.getDataBank().getClientesDiarios();
+			List<CupoMensual> clientesMensuales = parqueadero.getCuposMensuales();
+			try {
+				PrintWriter salida = new PrintWriter("export.txt");
+				salida.println(clientesMensuales.size());
+				for (CupoMensual cliente: clientesMensuales) {
+					salida.println(cliente);
+				}
+				salida.println(clientesDiarios.size());
+				for (ClienteDiario cliente: clientesDiarios){
+					salida.println(cliente);
+				}
+				salida.close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			JOptionPane.showMessageDialog(null, "Informacion exportada.");
+	}
+
 	protected void cerrarDiaEspecial() {
 		String fechaStr = txtAdmFecha.getText().trim();
 		try {
