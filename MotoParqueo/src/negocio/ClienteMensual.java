@@ -48,15 +48,29 @@ public class ClienteMensual implements Serializable{
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append(cedula);
+		if(cedula.compareTo("")==0){
+			builder.append("-");
+		}else{
+			builder.append(cedula);
+		}
 		builder.append("|");
-		builder.append(nombre);
+		if(nombre.compareTo("")==0){
+			builder.append("-");
+		}else{
+			builder.append(nombre);
+		}
 		builder.append("|");
-		builder.append(placa);
+		if(placa.compareTo("")==0){
+			builder.append("-");
+		}else{
+			builder.append(placa);
+		}
 		builder.append("|");
-		builder.append(celular);
-		builder.append("|");
-		builder.append(meses);
+		if(celular.compareTo("")==0){
+			builder.append("-");
+		}else{
+			builder.append(celular);
+		}
 		return builder.toString();
 	}
 		
