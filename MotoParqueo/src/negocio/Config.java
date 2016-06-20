@@ -35,6 +35,7 @@ public class Config implements Serializable{
 		return preferidos;
 	}
 	public static void inicializar(){
+            
 		File ruta = new File("config.cfg");
 		Scanner lector = null;
 		try {

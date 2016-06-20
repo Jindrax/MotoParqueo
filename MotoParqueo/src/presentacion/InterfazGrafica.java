@@ -45,6 +45,12 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
+import ca.odell.glazedlists.BasicEventList;
+import ca.odell.glazedlists.EventList;
+import ca.odell.glazedlists.swing.DefaultEventListModel;
+import ca.odell.glazedlists.swing.GlazedListsSwing;
 import contabilidad.Contabilidad;
 import contabilidad.Transferencia;
 import contabilidad.TransferenciaDiaria;
@@ -91,10 +97,12 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.ImageIcon;
 import java.awt.SystemColor;
+import javax.swing.JList;
 
 @SuppressWarnings("unused")
 public class InterfazGrafica {
 
+	private EventList<String> colaEntrada;
 	private JFrame frmMotoparqueo;
 	private static Parqueadero parqueadero = null;
 	private JScrollPane scrollPaneDiario;
@@ -163,6 +171,9 @@ public class InterfazGrafica {
 	private JButton btnAdmCerrarDiaEspecial;
 	private JButton btnAdmIngresar;
 	private JPanel tabAdmHDiario;
+	private JScrollPane scrollPane;
+	@SuppressWarnings("rawtypes")
+	private JList colaSwing;
 	/**
 	 * Launch the application.
 	 */
@@ -185,8 +196,13 @@ public class InterfazGrafica {
 	/**
 	 * Create the application.
 	 */
+	@SuppressWarnings("unchecked")
 	public InterfazGrafica() {
 		initialize();
+		colaEntrada = new BasicEventList<>();
+		DefaultEventListModel<String> modelo = GlazedListsSwing.eventListModel(colaEntrada);
+		colaSwing.setModel(modelo);
+		AutoCompleteDecorator.decorate(textoPlaca, colaEntrada, false);
 	}
 
 	/**
@@ -242,6 +258,54 @@ public class InterfazGrafica {
 		
 		rowDataMotosDiario = new Vector();
 		columnasMotosDiarioV = new Vector(Arrays.asList(columnastableMotosDiarioS));
+		
+		JPanel panelAdmin = new JPanel();
+		panelAdmin.setBackground(Color.YELLOW);
+		panelAdmin.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent e) {
+				try {
+					if (JOptionPane.showInputDialog("Clave: ").equals("8051")) {
+						getTCierre().setText(String.valueOf(Parqueadero.getHoraCierre()));
+						tCons.setText(String.valueOf(parqueadero.getContabilidad().getConsecutivo()));
+						actualizarTHistorial();
+						eTotalCobrado.setText(String.valueOf(parqueadero.getContabilidad().getCajaActual()));
+						if (parqueadero.getValor()!=null) {
+							txtAdmMH.setText(String.valueOf(parqueadero.getValor()[0]));
+							txtAdmUH.setText(String.valueOf(parqueadero.getValor()[1]));
+							txtAdmPH.setText(String.valueOf(parqueadero.getValor()[2]));
+						}else{
+							long [] valor = {600,900,700};
+							parqueadero.setValor(valor);
+							txtAdmMH.setText(String.valueOf(parqueadero.getValor()[0]));
+							txtAdmUH.setText(String.valueOf(parqueadero.getValor()[1]));
+							txtAdmPH.setText(String.valueOf(parqueadero.getValor()[2]));
+						}
+					}else{
+						tabbedPane.setSelectedIndex(0);
+						JOptionPane.showMessageDialog(null, "Clave Errada.");
+					}
+				} catch (NullPointerException e1) {
+					tabbedPane.setSelectedIndex(0);
+					JOptionPane.showMessageDialog(null, "Operacion cancelada.");
+				}
+			}
+		});		
+		JPanel panelMensual = new JPanel();
+		panelMensual.setBackground(Color.YELLOW);
+		panelMensual.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent e) {
+				actualizarTMensual();
+				txtMenMensualidad.setText(String.valueOf(parqueadero.getMensualidad()));
+			}
+		});
+		panelMensual.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				actualizarTMensual();
+			}
+		});
 		tableMotosDiario = new JTable(rowDataMotosDiario, columnasMotosDiarioV);
 		tableMotosDiario.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableMotosDiario.getSelectionModel().addListSelectionListener(new ListSelectionListener() {			
@@ -285,7 +349,7 @@ public class InterfazGrafica {
 		
 		JLabel lblValor = new JLabel("Valor");
 		lblValor.setFont(new Font("Arial", Font.PLAIN, 40));
-		lblValor.setBounds(1035, 231, 92, 47);
+		lblValor.setBounds(1035, 295, 92, 47);
 		panelDiario.add(lblValor);
 		
 		textoValor = new JTextField();
@@ -303,14 +367,14 @@ public class InterfazGrafica {
 		});
 		textoValor.setHorizontalAlignment(SwingConstants.RIGHT);
 		textoValor.setText("0");
-		textoValor.setBounds(1147, 228, 232, 53);
+		textoValor.setBounds(1147, 292, 232, 53);
 		panelDiario.add(textoValor);
 		textoValor.setColumns(10);
 		
 		eTiempo = new JLabel("Tiempo transcurrido");
 		eTiempo.setFont(new Font("Arial", Font.PLAIN, 20));
 		eTiempo.setHorizontalAlignment(SwingConstants.RIGHT);
-		eTiempo.setBounds(1035, 292, 344, 24);
+		eTiempo.setBounds(1035, 356, 344, 24);
 		panelDiario.add(eTiempo);
 		
 		btnCobrar = new JButton("Cobrar");
@@ -320,13 +384,13 @@ public class InterfazGrafica {
 				cobrar();
 			}
 		});
-		btnCobrar.setBounds(1223, 354, 156, 40);
+		btnCobrar.setBounds(1223, 391, 156, 40);
 		panelDiario.add(btnCobrar);
 		
 		JSeparator separator = new JSeparator();
 		separator.setForeground(Color.BLACK);
 		separator.setBackground(Color.BLACK);
-		separator.setBounds(1035, 150, 344, 5);
+		separator.setBounds(1035, 221, 344, 5);
 		panelDiario.add(separator);
 		
 		JButton btnImprimir = new JButton("Imprimir");
@@ -336,13 +400,13 @@ public class InterfazGrafica {
 				printCobrar();
 			}
 		});
-		btnImprimir.setBounds(1035, 354, 163, 40);
+		btnImprimir.setBounds(1035, 391, 163, 40);
 		panelDiario.add(btnImprimir);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		panel_1.setBackground(Color.BLACK);
-		panel_1.setBounds(1035, 177, 344, 47);
+		panel_1.setBounds(1035, 237, 344, 47);
 		panelDiario.add(panel_1);
 		panel_1.setLayout(null);
 		
@@ -427,56 +491,16 @@ public class InterfazGrafica {
 		
 		JLabel label = new JLabel("");
 		label.setIcon(new ImageIcon(InterfazGrafica.class.getResource("/recursos/Logo parqueadero.jpg")));
-		label.setBounds(1050, 460, 314, 229);
+		label.setBounds(1050, 520, 314, 229);
 		panelDiario.add(label);
 		
-		JPanel panelAdmin = new JPanel();
-		panelAdmin.setBackground(Color.YELLOW);
-		panelAdmin.addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentShown(ComponentEvent e) {
-				try {
-					if (JOptionPane.showInputDialog("Clave: ").equals("8051")) {
-						getTCierre().setText(String.valueOf(Parqueadero.getHoraCierre()));
-						tCons.setText(String.valueOf(parqueadero.getContabilidad().getConsecutivo()));
-						actualizarTHistorial();
-						eTotalCobrado.setText(String.valueOf(parqueadero.getContabilidad().getCajaActual()));
-						if (parqueadero.getValor()!=null) {
-							txtAdmMH.setText(String.valueOf(parqueadero.getValor()[0]));
-							txtAdmUH.setText(String.valueOf(parqueadero.getValor()[1]));
-							txtAdmPH.setText(String.valueOf(parqueadero.getValor()[2]));
-						}else{
-							long [] valor = {600,900,700};
-							parqueadero.setValor(valor);
-							txtAdmMH.setText(String.valueOf(parqueadero.getValor()[0]));
-							txtAdmUH.setText(String.valueOf(parqueadero.getValor()[1]));
-							txtAdmPH.setText(String.valueOf(parqueadero.getValor()[2]));
-						}
-					}else{
-						tabbedPane.setSelectedIndex(0);
-						JOptionPane.showMessageDialog(null, "Clave Errada.");
-					}
-				} catch (NullPointerException e1) {
-					tabbedPane.setSelectedIndex(0);
-					JOptionPane.showMessageDialog(null, "Operacion cancelada.");
-				}
-			}
-		});		
-		JPanel panelMensual = new JPanel();
-		panelMensual.setBackground(Color.YELLOW);
-		panelMensual.addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentShown(ComponentEvent e) {
-				actualizarTMensual();
-				txtMenMensualidad.setText(String.valueOf(parqueadero.getMensualidad()));
-			}
-		});
-		panelMensual.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				actualizarTMensual();
-			}
-		});
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(1035, 87, 214, 123);
+		panelDiario.add(scrollPane);
+		
+		colaSwing = new JList();
+		colaSwing.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		scrollPane.setViewportView(colaSwing);
 		tabbedPane.addTab("Mensual", null, panelMensual, null);
 		panelMensual.setLayout(null);
 		
@@ -1420,8 +1444,8 @@ public class InterfazGrafica {
 		}
 		return false;
 	}
-
-	protected void procesoPrincipal() {
+	
+	protected void ingreso(){
 		if (!textoPlaca.getText().startsWith("!")) {
 			if (textoPlaca.getText().length() >= 5) {
 				if (!isBanned(textoPlaca.getText())) {
@@ -1500,6 +1524,22 @@ public class InterfazGrafica {
 			}
 		}
 		parqueadero.guardar();
+	}
+
+	protected void procesoPrincipal() {
+		if(textoCascos.getText().compareTo("-")!=0){
+			if(colaEntrada.contains(textoPlaca.getText())){
+				colaEntrada.remove(textoPlaca.getText());
+				ingreso();
+			}else{
+				ingreso();
+			}			
+		}else{
+			colaEntrada.add(textoPlaca.getText());
+			textoPlaca.setText("");
+			textoCascos.setText("0");
+			textoPlaca.requestFocus();
+		}
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
